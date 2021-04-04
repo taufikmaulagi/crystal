@@ -12,28 +12,36 @@ class Users extends Crystal {
     }
 
     function index(){
-        // $this->load->model('privilege_model','mprivilege');
-        // echo $res['permission'] = $this->mprivilege->check_permission(2, $this->module, 'View');
-        $data['content'] = 'settings/users/index';
-        $data['user'] = $this->musers->read();
-        $data['plugin'] = ['datatables'];
-        template($data);
+        $this->load->model('role_model','mrole');
+        template(
+            title: 'Data Seluruh User',
+            content: 'settings/users/index',
+            plugin: ['datatables'],
+            data: [
+                'user' => $this->musers->read(),
+                'role' => $this->mrole->read()
+            ]
+        );
     }
 
     function add(){
         if($this->_validation()){
             $args['data'] = $this->_post_data();
-            if($this->musers->add($args['data'])>0){
-                flash(['message' => 'Simpan User Baru Berhasil','status'=>'success']);
-            } else {
-                flash(['message' => 'Simpan User Baru Gagal','status'=>'failed']);
-            }
-            redirect(base_url('settings/users/add'));
+            $args['data']['foto'] = $this->uploader('foto','user');
+            if($this->musers->create($args['data'])>0)
+                $this->flash(['message' => 'Simpan User Baru Berhasil','status'=>'success']);
+            else 
+                $this->flash(['message' => 'Simpan User Baru Gagal','status'=>'failed']);
+            redirect(base_url('settings/users/add'),'refresh');
         } else {
-            $data['content'] = 'settings/users/add';
             $this->load->model('role_model','musergroup');
-            $data['role'] = $this->musergroup->read();
-            template($data);
+            template(
+                title: 'Tambah User baru',
+                content: 'settings/users/add',
+                data: [
+                    'role' => $this->musergroup->read()
+                ]
+            );
         }
     }
 
@@ -79,22 +87,24 @@ class Users extends Crystal {
         $uniq['username'] = '|is_unique[users.username]';
         if(!empty($uniqlist['username']))
             $uniq['username'] = '';
-        set_rules('nama','Nama Lengkap','required|max_length[50]');
-        set_rules('role','User Group','required|max_length[3]');
-        set_rules('username','Username','required|max_length[30]'.$uniq['username']);
-        set_rules('email','Email','required|max_length[50]|valid_email');
-        set_rules('password','Password','required|max_length[50]|min_length[8]');
-        set_rules('confirm_password','Konfirmasi Password','required|max_length[50]|matches[password]|min_length[8]');
-        return validation_run();
+        $this->set_rules('nama','Nama Lengkap','required|max_length[50]');
+        $this->set_rules('role','Role','required|max_length[3]');
+        $this->set_rules('username','Username','required|max_length[30]'.$uniq['username']);
+        $this->set_rules('email','Email','required|max_length[50]|valid_email');
+        $this->set_rules('password','Password','required|max_length[50]|min_length[8]');
+        $this->set_rules('confirm_password','Konfirmasi Password','required|max_length[50]|matches[password]|min_length[8]');
+        return $this->validation_run();
     }
 
     private function _post_data(){
         return [
-            'nama' => post('nama'),
-            'role' => post('role'),
-            'username' => post('username'),
-            'email' => post('email'),
-            'password' => sha1(post('password'))
+            'nama' => $this->post('nama'),
+            'tanggal_lahir' => $this->post('tanggal_lahir') != '01-01-1970' ? strtotime('Y-m-d', strtotime($this->post('tanggal_lahir'))) : NULL,
+            'jenis_kelamin' => $this->post('jenis_kelamin'),
+            'role' => $this->post('role'),
+            'username' => $this->post('username'),
+            'email' => $this->post('email'),
+            'password' => sha1($this->post('password'))
         ];
     }
 

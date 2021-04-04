@@ -2,7 +2,7 @@
 
 $GLOBALS['title'] = '';
 
-function template($style='default',$content='templates/empty',$title='Judul belum diset! Perbaiki',$plugin=array(),){
+function template($style='default',$content='templates/empty',$title='Judul belum diset! Perbaiki',$plugin=array(),$data=array()){
     $el =& get_instance();
     $data['main'] = $el->db->get('content')->result_array()[0];
     $data['heaplug'] = '';
@@ -51,33 +51,6 @@ function load_plugin($plugin){
             ];
         break;
     }
-}
-
-function set_rules($name, $label, $rule){
-    $el =& get_instance();
-    $el->form_validation->set_rules($name, $label, $rule.'|trim|xss_clean');
-}
-
-function validation_run(){
-    $el =& get_instance();
-    return $el->form_validation->run();
-}
-
-function post($post){
-    $el =& get_instance();
-    return $el->input->post($post);
-}
-
-function get($get){
-    $el =& get_instance();
-    return $el->input->get($get);
-}
-
-function flash($flash,$state='set'){
-    $el =& get_instance();
-    if($state=='show')
-        return $el->session->flashdata($flash);
-    return $el->session->set_flashdata($flash);
 }
 
 function load_menu($item,$class=''){

@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="<?=assets()?>css/font.css" type="text/css" />
   <link rel="stylesheet" href="<?=assets()?>js/select2/select2.css" type="text/css" />
   <link rel="stylesheet" href="<?=assets()?>js/select2/theme.css" type="text/css" />
+  <link rel="stylesheet" href="<?=assets()?>js/datepicker/datepicker.css" type="text/css">
   <link rel="stylesheet" href="<?=assets()?>css/app.css" type="text/css" />
     <?=$heaplug?>
     <script src="<?=assets()?>js/jquery.min.js"></script>

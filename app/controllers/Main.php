@@ -7,7 +7,7 @@ class Main extends Crystal {
 	public function index()
 	{
 		// $data['content'] = 'dashboard';
-		template();
+		template(title:'Dashboard');
 	}
 	
 }

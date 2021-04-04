@@ -47,6 +47,7 @@
   <script src="<?=assets()?>js/slimscroll/jquery.slimscroll.min.js"></script>
   <script src="<?=assets()?>js/select2/select2.min.js"></script>
   <script src="<?=assets()?>js/moment.js"></script>
+  <script src="<?=assets()?>js/datepicker/bootstrap-datepicker.js"></script>
   <?=$fooplug?>
   <script>
     $('.dd').on('change', function() {
@@ -82,7 +83,7 @@
       if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function(e) {
-          $(input).prev().attr('src', e.target.result);
+          $(input).prev().children().attr('src', e.target.result);
         }
         reader.readAsDataURL(input.files[0]);
       }

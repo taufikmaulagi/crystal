@@ -10,7 +10,7 @@ function panel($theme='primary', $body='', $title='', $actions=[], $hidden='', $
     return '<section '.$id.' class="panel panel-'.$theme.'" '.$hidden.'>
         <header class="panel-heading">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-6" style="font-size:20px">
                     <b>'.$title.'</b>
                 </div>
                 <div class="col-sm-6" style="text-align:right">
@@ -34,8 +34,8 @@ function row($cols){
     return '<div class="row">'.$html['cols'].'</div>';
 }
 
-function col($size, $body){
-    return '<div class="col-'.$size.'">'.$body.'</div>';
+function col($size, $body, $align='left'){
+    return '<div class="col-'.$size.' text-'.$align.'">'.$body.'</div>';
 }
 
 function datatable($head, $body, $style=array()){
@@ -72,18 +72,18 @@ function datatable($head, $body, $style=array()){
 			</table></div>';
 }
 
-function button($theme='primary',$text='Button',$target='',$icon='',$size='sm',$onclick='',$style=''){
+function button($theme='primary',$text='Button',$target='',$icon='',$size='sm',$onclick='',$style='',$other=''){
 	$icon = !empty($icon) ? '<i class="fa fa-'.$icon.'"></i>' : '';
     $onclick = !empty($onclick) ? 'onclick="'.$onclick.'"' : '';
     $style = !empty($style) ? 'style="'.$style.'"' : '';
-	return '<a href="'.$target.'" class="btn btn-'.$theme.' btn-'.$size.'" '.$style.' '.$onclick.'>'.$icon.'&nbsp;&nbsp;'.$text.'</a>';
+	return '<a href="'.$target.'" class="btn btn-'.$theme.' btn-'.$size.'" '.$style.' '.$onclick.' '.$other.'>'.$icon.'&nbsp;&nbsp;'.'<b>'.$text.'</b></a>';
 }
 
-function button_icon($theme='primary',$target='',$icon='',$size='sm',$onclick='',$style=''){
+function button_icon($theme='primary',$target='',$icon='',$size='sm',$onclick='',$style='', $other=''){
 	$icon = !empty($icon) ? '<i class="fa fa-'.$icon.'"></i>' : '';
     $onclick = !empty($onclick) ? 'onclick="'.$onclick.'"' : '';
     $style = !empty($style) ? 'style="'.$style.'"' : '';
-	return '<a href="'.$target.'" class="btn btn-'.$size.' btn-icon-only btn-'.$theme.'" '.$style.' '.$onclick.'>
+	return '<a href="'.$target.'" class="btn btn-'.$size.' btn-icon-only btn-'.$theme.'" '.$style.' '.$onclick.' '.$other.'>
 				'.$icon.'
 			</a>';
 }
@@ -93,35 +93,20 @@ function badge($text='Badge',$theme='primary'){
 }
 
 function form($action='#',$method='post',$enctype='',$form=''){
-    return '<form action="'.$action.'" method="'.$method.'" enctype="'.$enctype.'" autocomplete="off">'.$form.'</form>';
+    $html['form'] = '';
+    foreach($form as $key => $val){
+        $html['form'].= $val;
+    }
+    return '<form action="'.$action.'" method="'.$method.'" enctype="'.$enctype.'" autocomplete="off">'.$html['form'].'</form>';
 }
 
-function input_text($label, $name, $value=''){
+function input($label, $name, $value='',$width='',$size='',$type='text'){
     $ci =& get_instance(); 
+    $size = !empty($size) ? ' form-group-'.$size : '';
     $value = !empty($ci->input->post($name)) ? $ci->input->post($name) : $value;
     return '<div class="form-group">
             <label> '.$label.' </label>
-            <input type="text" name="'.$name.'" class="form-control" placeholder="Masukan '.$label.' disini . ." value="'.$value.'">
-            <span class="help-block m-b-none text-danger">'.form_error($name).'</span>
-        </div>';
-}
-
-function input_email($label, $name, $value=''){
-    $ci =& get_instance(); 
-    $value = !empty($ci->input->post($name)) ? $ci->input->post($name) : $value;
-    return '<div class="form-group">
-            <label> '.$label.' </label>
-            <input type="email" name="'.$name.'" class="form-control" placeholder="Masukan '.$label.' disini . ." value="'.$value.'">
-            <span class="help-block m-b-none text-danger">'.form_error($name).'</span>
-        </div>';
-}
-
-function input_text_disable($label, $name, $value=''){
-    $ci =& get_instance(); 
-    $value = !empty($ci->input->post($name)) ? $ci->input->post($name) : $value;
-    return '<div class="form-group">
-            <label> '.$label.' </label>
-            <input type="text" name="'.$name.'" class="form-control" placeholder="Masukan '.$label.' disini . ." value="'.$value.'" disabled>
+            <input type="'.$type.'" name="'.$name.'" class="form-control'.$size.'" placeholder="Masukan '.$label.' disini . ." value="'.$value.'" style="width:'.$width.'">
             <span class="help-block m-b-none text-danger">'.form_error($name).'</span>
         </div>';
 }
@@ -130,32 +115,14 @@ function input_hidden($name, $value=''){
     return '<input type="hidden" name="'.$name.'" value="'.$value.'">';
 }
 
-function input_number($label, $name, $value=''){
+function input_textarea($label, $name, $value='',$width='',$size=''){
     $ci =& get_instance(); 
+    $size = !empty($size) ? ' input-'.$size : '';
+    $col = !empty($col) ? ' col-'.$col : '';
     $value = !empty($ci->input->post($name)) ? $ci->input->post($name) : $value;
     return '<div class="form-group">
             <label> '.$label.' </label>
-            <input type="number" name="'.$name.'" class="form-control" placeholder="Masukan '.$label.' disini . ." value="'.$value.'">
-            <span class="help-block m-b-none text-danger">'.form_error($name).'</span>
-        </div>';
-}
-
-function input_password($label, $name, $value=''){
-    $ci =& get_instance(); 
-    $value = !empty($ci->input->post($name)) ? $ci->input->post($name) : $value;
-    return '<div class="form-group">
-            <label> '.$label.' </label>
-            <input type="password" name="'.$name.'" class="form-control" placeholder="Masukan '.$label.' disini . ." value="'.$value.'">
-            <span class="help-block m-b-none text-danger">'.form_error($name).'</span>
-        </div>';
-}
-
-function input_textarea($label, $name, $value=''){
-    $ci =& get_instance(); 
-    $value = !empty($ci->input->post($name)) ? $ci->input->post($name) : $value;
-    return '<div class="form-group">
-            <label> '.$label.' </label>
-            <textarea name="'.$name.'" class="form-control" placeholder="Masukan '.$label.' disini . .">'.$value.'</textarea>
+            <textarea name="'.$name.'" class="form-control'.$size.'" placeholder="Masukan '.$label.' disini . .">'.$value.'</textarea>
             <span class="help-block m-b-none text-danger">'.form_error($name).'</span>
         </div>';
 }
@@ -182,24 +149,23 @@ function input_radio($label, $name, $data, $value=''){
         </div>';
 }
 
-function input_date($label, $name, $value='', $start='2000-03-01'){
+function input_date($label, $name, $value='', $start='2000-03-01',$width='',$size=''){
     $ci =& get_instance(); 
+    $size = !empty($size) ? ' input-'.$size : '';
+    $col = !empty($col) ? ' col-'.$col : '';
     $value = !empty($ci->input->post($name)) ? $ci->input->post($name) : $value;
     return '<div class="form-group">
-            <label> '.$label.' </label><br/>
-            <div class="input-group input-medium date date-picker" data-date="'.$start.'" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
-				<input type="text" class="form-control" name="'.$name.'" value="'.$value.'" readonly>
-				<span class="input-group-btn">
-					<button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
-				</span>
-			</div>
-            <span class="help-block m-b-none text-danger">'.form_error($name).'</span>
-        </div>';
+                <label> '.$label.' </label><br/>
+                <input type="text" class="form-control'.$size.' datepicker-input" name="'.$name.'" value="'.date('d-m-Y',strtotime($value)).'" data-date-format="dd-mm-yyyy">
+                <span class="help-block m-b-none text-danger">'.form_error($name).'</span>
+            </div>';
 }
 
-function input_select($label, $name, $data, $value=''){
+function input_select($label, $name, $data, $value='',$width='',$size=''){
     $ci =& get_instance();
     $option = '';
+    $size = !empty($size) ? ' input-'.$size : '';
+    $col = !empty($col) ? ' col-'.$col : '';
     foreach($data as $key => $val){
         if(empty($ci->input->post($name))){
             $selected = !empty($value) && $value == $val['id'] ? 'selected="selected"' : '';
@@ -210,7 +176,7 @@ function input_select($label, $name, $data, $value=''){
     }
     return '<div class="form-group">
             <label> '.$label.' </label><br/>
-            <select name="'.$name.'" class="form-control">
+            <select name="'.$name.'" class="form-control'.$size.'">
                 <option value="">-- Pilih '.$label.' --</option>'
                 .$option.
             '</select>
@@ -218,7 +184,7 @@ function input_select($label, $name, $data, $value=''){
         </div>';
 }
 
-function input_select2($label, $name, $data, $value=''){;
+function input_select2($label, $name, $data, $value='', $width='200px'){;
     $ci =& get_instance();
     $option = '';
     foreach($data as $key => $val){
@@ -232,7 +198,7 @@ function input_select2($label, $name, $data, $value=''){;
 
     return '<div class="form-group">
             <label> '.$label.' </label><br/>
-            <select name="'.$name.'" style="width:200px" id="select2-option'.$GLOBALS['select2_counter']++.'">
+            <select name="'.$name.'" style="width:'.$width.';" id="select2-option'.$GLOBALS['select2_counter']++.'">
                 <option value="">-- Pilih '.$label.' --</option>'
                 .$option.
             '</select>
@@ -240,13 +206,16 @@ function input_select2($label, $name, $data, $value=''){;
         </div>';
 }
 
-function input_image($label, $name, $value=''){
+function input_image($label, $name, $value='', $size=''){
     $value = empty($value) ? 'default.png' : $value;
-    return '<div class="form-group">
-            <label> '.$label.' </label><br/>
-            <img width="250px" class="img-thumbnail" src="'.base_url('public/images/'.$value).'">
-            <input type="file" name="'.$name.'" onchange="change_img_file(this)">
-            <span class="help-block m-b-none text-danger">'.form_error($name).'</span>
+    $size = !empty($size) ? ' col-'.$size : '';
+    return '<div class="form-group'.$size.'">
+                <label> '.$label.' </label><br/>
+                <p>
+                    <img width="150px" src="'.base_url('public/images/'.$value).'">
+                </p>
+                <input type="file" name="'.$name.'" onchange="change_img_file(this)" class="form-control input-s">
+                <span class="help-block m-b-none text-danger">'.form_error($name).'</span>
         </div>';
 }
 
@@ -265,7 +234,12 @@ function input_submit($value, $color="primary"){
 function action_button($url,$id,$avail=['edit','delete']){
     $action = '';
     if(in_array('edit',$avail)){
-        $action.=button_icon(['color'=>'warning','icon'=>'fa fa-pencil','target'=>$url.'/edit/'.$id,'size'=>'xs']);
+        $action.=button_icon(
+            theme: 'warning',
+            icon: 'pencil',
+            target: $url.'/edit/'.$id,
+            size: 'xs'
+        );
     }
     if(in_array('delete',$avail)){
         $action.='&nbsp;&nbsp;<button class="btn btn-xs btn-danger" data-toggle="popover" data-html="true" data-placement="left" 
@@ -278,9 +252,11 @@ function action_button($url,$id,$avail=['edit','delete']){
     return $action;
 }
 
-function image($image='default.png', $path='./public/images/', $style=''){
+function image($image='default.png', $path='public/images/', $style='', $class=''){
     $style = !empty($args['style']) ? 'style="'.$args['style'].'"' : 'style="width:100%"';
-    return '<img src="'.base_url($path.$image).'" '.$style.'>';
+    if(empty($image))
+        $image = 'default.png';
+    return '<img class="'.$class.'" src="'.base_url($path.$image).'" '.$style.'>';
 }
 
 function alert_flashdata($flashdata, $status='success'){
@@ -296,6 +272,7 @@ function alert_flashdata($flashdata, $status='success'){
                 '.$ci->session->flashdata($flashdata).'
             </div>';
     }
+    $ci->session->unset_userdata(['message','status']);
 }
 
 function ftime($format, $date){
@@ -321,7 +298,7 @@ function modal($id, $title, $content, $theme="primary"){
   </div>';
 }
 
-function select2($name, $data, $value=''){
+function select2($name, $data, $value='',$width="200px"){
     $ci =& get_instance();
     $option = '';
     foreach($data as $key => $val){
@@ -332,7 +309,13 @@ function select2($name, $data, $value=''){
         }
         $option.= '<option value="'.$val['id'].'" '.$selected.'> '.$val['text'].'</option>';
     }
-    return '<select name="'.$name.'" id="select2-option'.$GLOBALS['select2_counter']++.'" style="width:100%">'
+    return '<select name="'.$name.'" style="width:'.$width.'" id="select2-option'.$GLOBALS['select2_counter']++.'">'
                 .$option.
             '</select>';
+}
+
+function table_text($text){
+    if(!empty($text))
+        return $text;
+    return '--';
 }
