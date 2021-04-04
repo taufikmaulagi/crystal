@@ -16,3 +16,6 @@ web app admin starter kit
 
 # if mysql error
 - sudo apt install php5.6-mysqlnd-ms
+
+# for phpmyadmin should install this package
+- sudo apt install php-xml
