@@ -8,7 +8,7 @@ alert_flashdata('message', 'status');
 echo panel(
     title: 'Tambah User Baru',
     actions: [
-        button(theme: 'warning',icon: 'arrow-left',text: 'Kembali',target:'../users')
+        button(theme: 'warning',icon: 'arrow-left',text: 'Kembali',target:base_url('settings/users'))
     ],
     body: panel_body(
         row([

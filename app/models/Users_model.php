@@ -5,7 +5,7 @@ class Users_model extends CI_Model {
     function read($id='',$role=''){
         if(!empty($id)) $this->db->where('users.id',$id);
         if(!empty($role)) $this->db->where('role.id',$role);
-        $this->db->select('users.foto, users.id, users.nama, users.username, users.email, users.password, users.created_at, role.nama as role, users.role as id_role');
+        $this->db->select('users.foto, users.id, users.nama, users.username, users.email, users.password, users.created_at, role.nama as role, users.role as id_role, tanggal_lahir, foto, jenis_kelamin');
         $this->db->join('role','users.role = role.id');
         $this->db->where(['users.deleted_at' => NULL, 'role.deleted_at' => NULL]);
         return $this->db->get('users')->result_array();
@@ -18,6 +18,13 @@ class Users_model extends CI_Model {
 
     function update($args, $id){
         $args['updated_at'] = date('Y-m-d H:i:s');
+        $res['user'] = $this->read(id: $id)[0];
+        if(!empty($args['foto'])){
+            if(!empty($res['user']['foto']))
+                unlink('./public/images/'.$res['user']['foto']);
+        } else {
+            unset($args['foto']);
+        }
         $this->db->update('users', $args, ['id' => $id]);
         return $this->db->affected_rows();
     }

@@ -13,7 +13,7 @@ foreach($user as $key => $val){
         action_button(base_url('settings/users'),$val['id'])
     ]);
 }
-$list['role'] = array();
+$list['role'] = array(['id'=>'','text'=>'-- Semua Role --']);
 foreach($role as $key => $val){
     array_push($list['role'],[
         'id' => $val['id'],
@@ -41,4 +41,15 @@ echo panel(
         ]
     )
 );
+?>
+<script>
 
+    $("select[name='role']").on('change', function(){
+        if($(this).val()!=''){
+            location.replace("<?=base_url('settings/users?role=')?>"+$(this).val());
+        } else {
+            location.replace("<?=base_url('settings/users')?>");
+        }
+    })
+
+</script>

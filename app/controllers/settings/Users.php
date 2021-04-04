@@ -18,7 +18,7 @@ class Users extends Crystal {
             content: 'settings/users/index',
             plugin: ['datatables'],
             data: [
-                'user' => $this->musers->read(),
+                'user' => $this->musers->read(role: $this->input->get('role')),
                 'role' => $this->mrole->read()
             ]
         );
@@ -48,39 +48,44 @@ class Users extends Crystal {
     function edit($id){
         if(empty($id))
             redirect(base_url('settings/users'));
-        $res['user'] = $this->musers->read(['id' => $id]);
+        $res['user'] = $this->musers->read(id: $id);
         if(count($res['user'])<=0)
             redirect(base_url('settings/users'));
         $list['uniq'] = array();
         if($this->_post_data()['username'] == $res['user'][0]['username'])
             $list['uniq']['username'] = 'remove';
-
         if($this->_validation($list['uniq'])){
             $args['data'] = $this->_post_data();
-            if(post('password') == $res['user'][0]['password'])
+            $args['data']['foto'] = $this->uploader('foto','users');
+            if($this->post('password') == $res['user'][0]['password'])
                 unset($args['data']['password']);
             if($this->musers->update($args['data'], $id)>0){
-                flash(['message' => 'Update User Berhasil','status'=>'success']);
+                $this->flash(['message' => 'Update User Berhasil','status'=>'success']);
             } else {
-                flash(['message' => 'Update User Gagal','status'=>'failed']);
+                $this->flash(['message' => 'Update User Gagal','status'=>'failed']);
             }
-            redirect(base_url('settings/users/edit/'.$id));
+            // var_dump($args['data']);
+            redirect(base_url('settings/users/edit/'.$id),'refresh');
         } else {
-            $data['content'] = 'settings/users/edit';
-            $data['user'] = $res['user'][0];
-            $this->load->model('role_model','musergroup');
-            $data['role'] = $this->musergroup->read();
-            template($data);
+            $this->load->model('role_model','mrole');
+            template(
+                title: 'Update Data User',
+                content: 'settings/users/edit',
+                data: [
+                    'user' => $res['user'][0],
+                    'role' => $this->mrole->read()
+                ]
+            );
         }
     }
     
     function delete(){
-        if($this->musers->delete(post('id'))>0){
-            flash(['message'=>'Hapus User Berhasil', 'status'=>'success']);
+        if($this->musers->delete($this->post('id'))>0){
+            $this->flash(['message'=>'Hapus User Berhasil', 'status'=>'success']);
         } else {
-            flash(['message'=>'Hapus User Gagal', 'status'=>'failed']);
+            $this->flash(['message'=>'Hapus User Gagal', 'status'=>'failed']);
         }
-        redirect(base_url('settings/users/'));
+        redirect(base_url('settings/users/'),'refresh');
     }
 
     private function _validation($uniqlist=array()){
@@ -99,7 +104,7 @@ class Users extends Crystal {
     private function _post_data(){
         return [
             'nama' => $this->post('nama'),
-            'tanggal_lahir' => $this->post('tanggal_lahir') != '01-01-1970' ? strtotime('Y-m-d', strtotime($this->post('tanggal_lahir'))) : NULL,
+            'tanggal_lahir' => $this->post('tanggal_lahir') != '01-01-1970' ? date('Y-m-d', strtotime($this->post('tanggal_lahir'))) : NULL,
             'jenis_kelamin' => $this->post('jenis_kelamin'),
             'role' => $this->post('role'),
             'username' => $this->post('username'),

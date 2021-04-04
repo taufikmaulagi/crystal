@@ -5,21 +5,33 @@ foreach($role as $key => $val){
     array_push($list['role'], ['id' => $val['id'], 'text' => $val['nama']]);
 }
 alert_flashdata('message', 'status');
-echo panel(['color' => 'primary', 'title' => $title, 
-    'action' => button(['target' => base_url('settings/users'), 'icon' => 'fa fa-arrow-left', 'text' => 'Kembali', 'color' => 'warning', 'size' => 'xs']),
-    'content' => panel_body(
-        row(
+echo panel(
+    title: 'Update Data User',
+    actions: [
+        button(theme: 'warning',icon: 'arrow-left',text: 'Kembali',target:base_url('settings/users'))
+    ],
+    body: panel_body(
+        row([
             col('sm-8',
-                form(['method' => 'post', 'action' => base_url('settings/users/edit/'.$user['id']), 'form' => 
-                    input_text('Nama Lengkap','nama',$user['nama']).
-                    input_select('User Group','role',$list['role'],$user['id_role']).
-                    input_text('Username','username',$user['username']).
-                    input_email('Email','email',$user['email']).
-                    input_password('Password','password',$user['password']).
-                    input_password('Konfirmasi Password','confirm_password',$user['password']).
-                    input_submit('Simpan Perubahan','primary')
-                ])
+                form(
+                    enctype: 'multipart/form-data',
+                    form: [
+                        input('Nama Lengkap','nama',$user['nama']),
+                        input_date('Tanggal Lahir','tanggal_lahir',$user['tanggal_lahir']),
+                        input_select('Jenis Kelamin','jenis_kelamin',[
+                            ['id'=>'L','text'=>'Laki - Laki'],
+                            ['id'=>'P','text'=>'Perempuan'],
+                        ],$user['jenis_kelamin']),
+                        input_select2('Role','role',$list['role'],$user['id_role']),
+                        input_image('Foto','foto',$user['foto']),
+                        input('Email','email',$user['email'],type:'email'),
+                        input('Username','username',$user['username']),
+                        input('Password','password',$user['password'],type:'password'),
+                        input('Konfirmasi Password','confirm_password',$user['password'],type:'password'),
+                        input_submit('Simpan Perubahan','info')
+                    ]
+                )
             )
-        )
+        ])
     )
-]);
+);

@@ -35,7 +35,7 @@ function row($cols){
 }
 
 function col($size, $body, $align='left'){
-    return '<div class="col-'.$size.' text-'.$align.'">'.$body.'</div>';
+    return '<div class="col-'.$size.'" align="'.$align.'">'.$body.'</div>';
 }
 
 function datatable($head, $body, $style=array()){
@@ -266,7 +266,7 @@ function alert_flashdata($flashdata, $status='success'){
         $color='danger';
     }
     if(!empty($ci->session->flashdata($flashdata))){
-        echo '<div class="alert alert-'.$color.' alert-dismissable">
+        echo '<div class="alert alert-'.$color.' alert-dismissable" style="font-size:15px">
                 <button type="button" class="close" data-dismiss="alert">×</button>
                 <i class="fa fa-comment-o"></i>&nbsp;&nbsp;
                 '.$ci->session->flashdata($flashdata).'
@@ -309,7 +309,7 @@ function select2($name, $data, $value='',$width="200px"){
         }
         $option.= '<option value="'.$val['id'].'" '.$selected.'> '.$val['text'].'</option>';
     }
-    return '<select name="'.$name.'" style="width:'.$width.'" id="select2-option'.$GLOBALS['select2_counter']++.'">'
+    return '<select name="'.$name.'" style="width:'.$width.'" class="text-left" id="select2-option'.$GLOBALS['select2_counter']++.'">'
                 .$option.
             '</select>';
 }
