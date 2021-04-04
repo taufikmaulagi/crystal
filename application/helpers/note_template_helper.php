@@ -2,38 +2,40 @@
 
 $GLOBALS['select2_counter'] = 1;
 
-function panel($args){
-    $args['color'] = !empty($args['color']) ? $args['color'] : 'default';
-    $args['content'] = !empty($args['content']) ? $args['content'] : '';
-    $args['title'] = !empty($args['title']) ? $args['title'] : '';
-    $args['action'] = !empty($args['action']) ? $args['action'] : '';
-    $args['hidden'] = !empty($args['hidden']) ? $args['hidden'] : '';
-    $args['id'] = !empty($args['id']) ? 'id="'.$args['id'].'"' : '';
-    return '<section '.$args['id'].' class="panel panel-'.$args['color'].'" '.$args['hidden'].'>
+function panel($theme='primary', $body='', $title='', $actions=[], $hidden='', $id=''){
+    $html['actions'] = '';
+    foreach($actions as $key => $val){
+        $html['actions'] .= $val.'&nbsp;&nbsp';
+    }
+    return '<section '.$id.' class="panel panel-'.$theme.'" '.$hidden.'>
         <header class="panel-heading">
             <div class="row">
                 <div class="col-sm-6">
-                    <b>'.$args['title'].'</b>
+                    <b>'.$title.'</b>
                 </div>
                 <div class="col-sm-6" style="text-align:right">
-                    '.$args['action'].'
+                    '.$html['actions'].'
                 </div>
             </div>
         </header>
-        '.$args['content'].'
+        '.$body.'
     </section>';
 }
 
-function panel_body($content){
-    return '<div class="panel-body">'.$content.'</div>';
+function panel_body($body){
+    return '<div class="panel-body">'.$body.'</div>';
 }
 
-function row($content){
-    return '<div class="row">'.$content.'</div>';
+function row($cols){
+    $html['cols'] = '';
+    foreach($cols as $key => $val){
+        $html['cols'] .= $val;
+    }
+    return '<div class="row">'.$html['cols'].'</div>';
 }
 
-function col($col, $content){
-    return '<div class="col-'.$col.'">'.$content.'</div>';
+function col($size, $body){
+    return '<div class="col-'.$size.'">'.$body.'</div>';
 }
 
 function datatable($head, $body, $style=array()){
@@ -70,43 +72,28 @@ function datatable($head, $body, $style=array()){
 			</table></div>';
 }
 
-function button($args=array()){
-	$args['color'] = empty($args['color']) ? 'primary' : $args['color'];
-	$args['text'] = empty($args['text']) ? 'Button' : $args['text'];
-	$args['target'] = empty($args['target']) ? 'javascript:void(0)' : $args['target'];
-	$args['icon'] = empty($args['icon']) ? '' : '<i class="'.$args['icon'].'"></i>';
-	$args['size'] = empty($args['size']) ? 'sm' : $args['size'];
-    $args['style'] = empty($args['style']) ? '' : 'style="'.$args['style'].'"';
-    $args['onclick'] = empty($args['onclick']) ? '' : 'onclick="'.$args['onclick'].'"';
-	return '<a href="'.$args['target'].'" class="btn btn-'.$args['size'].' btn-'.$args['color'].'" '.$args['style'].' '.$args['onclick'].'>
-				'.$args['icon'].'&nbsp;&nbsp;'.$args['text'].'
+function button($theme='primary',$text='Button',$target='',$icon='',$size='sm',$onclick='',$style=''){
+	$icon = !empty($icon) ? '<i class="fa fa-'.$icon.'"></i>' : '';
+    $onclick = !empty($onclick) ? 'onclick="'.$onclick.'"' : '';
+    $style = !empty($style) ? 'style="'.$style.'"' : '';
+	return '<a href="'.$target.'" class="btn btn-'.$theme.' btn-'.$size.'" '.$style.' '.$onclick.'>'.$icon.'&nbsp;&nbsp;'.$text.'</a>';
+}
+
+function button_icon($theme='primary',$target='',$icon='',$size='sm',$onclick='',$style=''){
+	$icon = !empty($icon) ? '<i class="fa fa-'.$icon.'"></i>' : '';
+    $onclick = !empty($onclick) ? 'onclick="'.$onclick.'"' : '';
+    $style = !empty($style) ? 'style="'.$style.'"' : '';
+	return '<a href="'.$target.'" class="btn btn-'.$size.' btn-icon-only btn-'.$theme.'" '.$style.' '.$onclick.'>
+				'.$icon.'
 			</a>';
 }
 
-function button_icon($args=array()){
-	$args['color'] = empty($args['color']) ? 'primary' : $args['color'];
-	$args['target'] = empty($args['target']) ? 'javascript:void(0)' : $args['target'];
-	$args['icon'] = empty($args['icon']) ? '' : '<i class="'.$args['icon'].'"></i>';
-	$args['size'] = empty($args['size']) ? 'sm' : $args['size'];
-    $args['style'] = empty($args['style']) ? '' : 'style="'.$args['style'].'"';
-    $args['onclick'] = empty($args['onclick']) ? '' : 'onclick="'.$args['onclick'].'"';
-	return '<a href="'.$args['target'].'" class="btn btn-'.$args['size'].' btn-icon-only btn-'.$args['color'].'" '.$args['style'].' '.$args['onclick'].'>
-				'.$args['icon'].'
-			</a>';
+function badge($text='Badge',$theme='primary'){
+	return '<span class="label bg-'.$theme.'"> '.$text.' </span>';
 }
 
-function badge($args=array()){
-	$args['color'] = empty($args['color']) ? 'primary' : $args['color'];
-	$args['text'] = empty($args['text']) ? 'Add Text' : $args['text'];
-	return '<span class="badge badge-'.$args['color'].' badge-roundless"> '.$args['text'].' </span>';
-}
-
-function form($args=array()){
-	$args['enctype'] = empty($args['enctype']) ? '' : $args['enctype'];
-	$args['method'] = empty($args['method']) ? '' : $args['method'];
-	$args['action'] = empty($args['action']) ? '' : $args['action'];
-    $args['form'] = empty($args['form']) ? '' : $args['form'];
-    return '<form action="'.$args['action'].'" method="'.$args['method'].'" enctype="'.$args['enctype'].'" autocomplete="off">'.$args['form'].'</form>';
+function form($action='#',$method='post',$enctype='',$form=''){
+    return '<form action="'.$action.'" method="'.$method.'" enctype="'.$enctype.'" autocomplete="off">'.$form.'</form>';
 }
 
 function input_text($label, $name, $value=''){
@@ -291,14 +278,9 @@ function action_button($url,$id,$avail=['edit','delete']){
     return $action;
 }
 
-function image($img='', $args=array()){
-    $args['style'] = !empty($args['style']) ? $args['style'] : 'width:100%';
-    $args['location'] = !empty($args['location']) ? $args['location'] : 'public/images/';
-    $args['default'] = !empty($args['default']) ? $args['default'] : 'default.png';
-    if(empty($img)){
-        $img = $args['default'];
-    }
-    return '<img src="'.base_url($args['location'].$img).'" style="'.$args['style'].'">';
+function image($image='default.png', $path='./public/images/', $style=''){
+    $style = !empty($args['style']) ? 'style="'.$args['style'].'"' : 'style="width:100%"';
+    return '<img src="'.base_url($path.$image).'" '.$style.'>';
 }
 
 function alert_flashdata($flashdata, $status='success'){

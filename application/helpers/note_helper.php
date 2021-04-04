@@ -2,33 +2,30 @@
 
 $GLOBALS['title'] = '';
 
-function template($args=array()){
+function template($style='default',$content='templates/empty',$title='Judul belum diset! Perbaiki',$plugin=array(),){
     $el =& get_instance();
-    $args['template'] = empty($args['template']) ? 'default' : $args['template'];
-    $args['content'] = empty($args['content']) ? 'templates/empty' : $args['content'];
-    $args['title'] = empty($args['title']) ? 'Judul Belum Ditentukan! Segera Perbaiki 🤪' : $args['title'];
-    $args['plugin'] = empty($args['plugin']) ? array() : $args['plugin'];
-    $args['main'] = $el->db->get('content')->result_array()[0];
-    $args['heaplug'] = '';
-    $args['fooplug'] = '';
-    foreach($args['plugin'] as $key => $val){
-        $args['heaplug'] .= load_plugin($val)['head'];
-        $args['fooplug'] .= load_plugin($val)['foot'];
+    $data['main'] = $el->db->get('content')->result_array()[0];
+    $data['heaplug'] = '';
+    $data['fooplug'] = '';
+    $data['title'] = $title;
+    foreach($plugin as $key => $val){
+        $data['heaplug'] .= load_plugin($val)['head'];
+        $data['fooplug'] .= load_plugin($val)['foot'];
     }
     $el->load->model('notification_model','mnotif');
-    $args['notif_lastest'] = $el->mnotif->read(['users'=>$el->session->userdata('logged_in')['id'],'status'=>'unseen']);
-    $args['notif_all'] = $el->mnotif->read(['users'=>$el->session->userdata('logged_in')['id']]);
+    $data['notif_lastest'] = $el->mnotif->read(['users'=>$el->session->userdata('logged_in')['id'],'status'=>'unseen']);
+    $data['notif_all'] = $el->mnotif->read(['users'=>$el->session->userdata('logged_in')['id']]);
     $el->load->model('menu_model','mmenu');
     $res['menu'] = $el->mmenu->read(['parent'=>0]);
     $data['menu'] = load_menu($res['menu']);
-    $args['sidemenu'] = $data['menu']['menu'];
-    $args['bread'] = $data['menu']['bread'];
-    $el->load->view('templates/'.$args['template'].'/head', $args);
-    $el->load->view('templates/'.$args['template'].'/nav');
-    $el->load->view('templates/'.$args['template'].'/side');
-    $el->load->view('templates/'.$args['template'].'/bread');
-    $el->load->view($args['content']);
-    $el->load->view('templates/'.$args['template'].'/foot');
+    $data['sidemenu'] = $data['menu']['menu'];
+    $data['bread'] = $data['menu']['bread'];
+    $el->load->view('templates/'.$style.'/head', $data);
+    $el->load->view('templates/'.$style.'/nav');
+    $el->load->view('templates/'.$style.'/side');
+    $el->load->view('templates/'.$style.'/bread');
+    $el->load->view($content);
+    $el->load->view('templates/'.$style.'/foot');
 }
 
 function assets($path=''){

@@ -6,8 +6,11 @@ class Crystal extends CI_Controller {
         parent::__construct();
         if(empty($this->session->userdata('logged_in')))
             redirect(base_url('auth/login'));
-        $this->load->helper('crystal');
-        $this->load->helper('template');
+        $GLOBALS['template'] = 'note';
+        if($GLOBALS['template'] == 'note'){
+            $this->load->helper('note');
+            $this->load->helper('note_template');
+        }
     }
 
 }

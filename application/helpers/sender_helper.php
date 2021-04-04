@@ -1,6 +1,6 @@
 <?php
 
-    function send_mail($args=array()){
+    function send_mail($to='',$subject='',$message='',$attach=''){
 
         $config = [
             'mailtype'      => 'html',
@@ -15,18 +15,15 @@
             'newline'       => "\r\n"
         ];
 
-        $args['to'] = empty($args['to']) ? '' : $args['to'];
-        $args['subject'] = empty($args['subject']) ? '' : $args['subject'];
-        $args['message'] = empty($args['message']) ? '' : $args['message'];
         $el =& get_instance();
         $el->load->library('email', $config);
         $el->email->from('no-reply@crystal.com', 'crystal.com');
-        $el->email->to($args['to']);
-        if(!empty($args['attach'])){
-            $el->email->attach($args['attach']);
+        $el->email->to($to);
+        if(!empty($attach)){
+            $el->email->attach($attach);
         }
-        $el->email->subject($args['subject']);
-        $el->email->message($args['message']);
+        $el->email->subject($subject);
+        $el->email->message($message);
         if ($el->email->send()) 
             return true;
         return false;
