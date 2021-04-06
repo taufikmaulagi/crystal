@@ -4,8 +4,8 @@ $hidden['edit'] = $this->input->get('state') == 'edit' ? 'show' : 'hidden';
 
 alert_flashdata('message','status');
 echo row([
-        is_unlock('Menu Manager|ADD', col('sm-3',
-            panel(
+        col('sm-3',
+            is_unlock('Menu Manager|ADD', panel(
                 id: 'tambahMenu',
                 hidden: $hidden['add'],
                 title: 'Tambah',
@@ -21,9 +21,8 @@ echo row([
                         ]
                     )
                 )
-            )
-        ).
-        is_unlock('Menu Manager|EDIT',panel(
+            ).
+            is_unlock('Menu Manager|EDIT',panel(
                 id: 'editMenu',
                 hidden: $hidden['edit'],
                 title: 'Update',
@@ -41,6 +40,7 @@ echo row([
                     )
                 )
             )
+        )
         )
     ),
     col('sm-9',
