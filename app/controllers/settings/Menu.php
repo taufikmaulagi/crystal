@@ -80,7 +80,7 @@ class Menu extends Crystal {
     }
 
     function ajx_organize(){
-        if(is_unlock('Menu Manager|VIEW')) return;
+        if(!is_unlock('Menu Manager|VIEW')) return;
         $data = $this->input->post('data');
         if(empty($data))
             return;
@@ -88,7 +88,7 @@ class Menu extends Crystal {
     }
 
     function ajx_get_detail($id){
-        if(is_unlock('Menu Manager|VIEW')) return;
+        if(!is_unlock('Menu Manager|VIEW')) return;
         if(empty($id))
             return;
         echo json_encode($this->mmenu->read(id: $id));
