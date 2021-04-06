@@ -19,7 +19,7 @@ class Menu extends Crystal {
                 $args['menu']['parent'] = 0;
                 $res['menu'] = $this->mmenu->read(parent:0);
                 $args['menu']['position'] = intval($res['menu'][count($res['menu'])-1]['positon'])+1;
-                if($this->mmenu->add($args['menu'])>0){
+                if($this->mmenu->create($args['menu'])>0){
                     $this->flash(['message'=>'Simpan Menu Baru Berhasil','status'=>'success']);
                 } else {
                     $this->flash(['message'=>'Simpan Menu Baru Gagal','status'=>'failed']);
@@ -80,7 +80,7 @@ class Menu extends Crystal {
     }
 
     function ajx_organize(){
-        if(is_unlock('Menu Manager|VIEW')) return;
+        if(!is_unlock('Menu Manager|VIEW')) return;
         $data = $this->input->post('data');
         if(empty($data))
             return;
@@ -88,7 +88,7 @@ class Menu extends Crystal {
     }
 
     function ajx_get_detail($id){
-        if(is_unlock('Menu Manager|VIEW')) return;
+        if(!is_unlock('Menu Manager|VIEW')) return;
         if(empty($id))
             return;
         echo json_encode($this->mmenu->read(id: $id));
