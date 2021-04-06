@@ -15,18 +15,21 @@ class Privilege_model extends CI_Model {
                     $this->db->where('role',$args['role']);
                 if(!empty($args['access']))
                     $this->db->where('access',$args['access']);
+                if(!empty($args['module']))
+                    $this->db->where('module',$args['module']);
                 return $this->db->get('permission')->result_array();
             }
         }
     }
 
-    function set_permission($access_id,$role){
-        $res['permission'] = $this->read(['type'=>'permission','role'=>$role,'access'=>$access_id]);
+    function set_permission($module,$role,$permission){
+        $res['permission'] = $this->read(['type'=>'permission','role'=>$role,'access'=>$permission, 'module'=>$module]);
         if(count($res['permission'])>0){
-            $this->db->delete('permission',['role'=>$role,'access'=>$access_id]);
+            $this->db->delete('permission',['role'=>$role,'access'=>$permission,'module'=>$module]);
         } else {
-            $this->db->insert('permission',['role'=>$role,'access'=>$access_id]);
+            $this->db->insert('permission',['role'=>$role,'access'=>$permission,'module'=>$module]);
         }
+        return $this->db->affected_rows();
     }
 
     function check_permission($role, $module, $access){

@@ -8,33 +8,31 @@ class  Notification_label extends Crystal {
     }
 
     function index(){
-        $data['label'] = $this->mnotiflabel->read();
-        $data['content'] = 'settings/notification_label/index';
-        $data['plugin'] = ['datatables'];
-        template($data);
+        template(
+            title: 'Notification Label',
+            content: 'settings/notification_label/index',
+            plugin: ['datatables'],
+            data: [
+                'label' => $this->mnotiflabel->read()
+            ]
+        );
     }
 
     function add(){
         if($this->_validation()){
             $args['label'] = $this->_postdata();
-            if(!empty($_FILES['icon']['name'])){
-                $config['upload_path'] = './public/images/';
-                $config['allowed_types'] = 'png|jpg|jpeg';
-                $config['file_name'] = 'nlabel-'.uniqid();
-                $this->load->library('upload',$config);
-                if($this->upload->do_upload('icon')){
-                    $args['label']['icon'] = $this->upload->file_name;
-                }
-            }
+            $args['label']['icon'] = $this->uploader('icon','nlabel');
             if($this->mnotiflabel->add($args['label'])){
-                flash(['message'=>'Label baru telah tersimpan','status'=>'success']);
+                $this->flash(['message'=>'Label baru telah tersimpan','status'=>'success']);
             } else {
-                flash(['message'=>'Label gagal tersimpan! Silahkan coba lagi','status'=>'failed']);
+                $this->flash(['message'=>'Label gagal tersimpan! Silahkan coba lagi','status'=>'failed']);
             }
             redirect(base_url('settings/notification_label/add'));
         } else {
-            $data['content'] = 'settings/notification_label/add';
-            template($data);
+            template(
+                title: 'Tambah Notifikasi Label Baru',
+                content: 'settings/notification_label/add'
+            );
         }
     }
 
@@ -44,47 +42,43 @@ class  Notification_label extends Crystal {
         if(count($res['label'])<=0){ redirect(base_url('settings/notification_label')); }
         if($this->_validation()){
             $args['label'] = $this->_postdata();
-            if(!empty($_FILES['icon']['name'])){
-                $config['upload_path'] = './public/images/';
-                $config['allowed_types'] = 'png|jpg|jpeg';
-                $config['file_name'] = 'nlabel-'.uniqid();
-                $this->load->library('upload',$config);
-                if($this->upload->do_upload('icon')){
-                    $args['label']['icon'] = $this->upload->file_name;
-                }
-            }
+            $args['label']['icon'] = $this->uploader('icon','nlabel');
             if($this->mnotiflabel->update($args['label'],$id)){
-                flash(['message'=>'Perubahan Label telah tersimpan','status'=>'success']);
+                $this->flash(['message'=>'Perubahan Label telah tersimpan','status'=>'success']);
             } else {
-                flash(['message'=>'Label gagal tersimpan! Silahkan coba lagi','status'=>'failed']);
+                $this->flash(['message'=>'Label gagal tersimpan! Silahkan coba lagi','status'=>'failed']);
             }
             redirect(base_url('settings/notification_label/edit/'.$id));
         } else {
-            $data['label'] = $res['label'][0];
-            $data['content'] = 'settings/notification_label/edit';
-            template($data);
+            template(
+                title: 'Update Notification Label',
+                content: 'settings/notification_label/edit',
+                data: [
+                    'label' => $res['label'][0]
+                ]
+            );
         }
     }
 
     function delete(){
-        if($this->mnotiflabel->delete(post('id'))>0){
-            flash(['message'=>'Label telah dihapus', 'status'=>'success']);
+        if($this->mnotiflabel->delete($this->post('id'))>0){
+            $this->flash(['message'=>'Label telah dihapus', 'status'=>'success']);
         } else {
-            flash(['message'=>'Label gagal dihapus! Silahkan coba lagi', 'status'=>'failed']);
+            $this->flash(['message'=>'Label gagal dihapus! Silahkan coba lagi', 'status'=>'failed']);
         }
         redirect(base_url('settings/notification_label/'));
     }
 
     private function _validation(){
-        set_rules('nama','Nama','required|max_length[20]');
-        set_rules('color','Color','required|max_length[15]');
-        return validation_run();
+        $this->set_rules('nama','Nama','required|max_length[20]');
+        $this->set_rules('color','Color','required|max_length[15]');
+        return $this->validation_run();
     }
 
     private function _postdata(){
         return [
-            'nama' => post('nama'),
-            'color' => post('color')
+            'nama' => $this->post('nama'),
+            'color' => $this->post('color')
         ];
     }
 

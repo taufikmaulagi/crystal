@@ -1,52 +1,62 @@
 <?php
+$hidden['add'] = $this->input->get('state') == 'edit' ? 'hidden' : '';
+$hidden['edit'] = $this->input->get('state') == 'edit' ? 'show' : 'hidden';
 
-
-$hidden['add'] = get('state') == 'edit' ? 'hidden' : '';
-$hidden['edit'] = get('state') == 'edit' ? 'show' : 'hidden';
-
-echo alert_flashdata('message','status').
-row(
+alert_flashdata('message','status');
+echo row([
     col('sm-3',
-        panel(['id'=>'tambahMenu', 'hidden'=>$hidden['add'],'title'=>'Tambah Baru', 'content'=>
-            panel_body(
-                form(['method'=>'post','action'=>base_url('settings/menu?state=add'),'form'=>
-                    input_text('Label','label').
-                    input_text('URL','url').
-                    input_text('Icon','icon').
-                    input_submit('Selesai & Simpan')
-                ])
+        panel(
+            id: 'tambahMenu',
+            hidden: $hidden['add'],
+            title: 'Tambah',
+            theme: 'success',
+            body: panel_body(
+                form(
+                    action: base_url('settings/menu?state=add'),
+                    form : [
+                        input('Label','label'),
+                        input('URL','url'),
+                        input('Icon','icon'),
+                        input_submit('Selesai & Simpan')
+                    ]
+                )
             )
-        , 'color'=>'success'
-        ]).
-        panel(['id'=>'editMenu', 'title'=>'Edit Menu', 'hidden'=>$hidden['edit'], 
-        'action' => button(['size' => 'xs', 'text'=>'Tambah Baru', 'icon'=>'fa fa-plus', 'color'=>'primary', 'onclick'=>'showTambahPanel()']),
-        'content'=>
-            panel_body(
-                form(['method'=>'post','action'=>base_url('settings/menu?state=edit'),'form'=>
-                    input_hidden('id').
-                    input_text('Label','label').
-                    input_text('URL','url').
-                    input_text('Icon','icon').
-                    input_submit('Simpan Perubahan')
-                ])
+        ).
+        panel(
+            id: 'editMenu',
+            hidden: $hidden['edit'],
+            title: 'Update',
+            theme: 'warning',
+            body: panel_body(
+                form(
+                    action: base_url('settings/menu?state=update'),
+                    form : [
+                        input_hidden('id'),
+                        input('Label','label',type:'text'),
+                        input('URL','url',type:'text'),
+                        input('Icon','icon',type:'text'),
+                        input_submit('Selesai & Simpan')
+                    ]
+                )
             )
-        , 'color'=>'warning'
-        ])
-    ). col('sm-9',
-        panel(['title'=>$title, 'content'=>
-            panel_body(
-                '<div class="dd" id="nestable3">'.$menu.'</div>'
-            )
-        ,'color'=>'primary'
-        ,'action'=>'<button id="nestable-menu" class="btn btn-xs btn-default active" data-toggle="class:show">
-            <i class="fa fa-plus text"></i>
-            <span class="text">Expand All</span>
-            <i class="fa fa-minus text-active"></i>
-            <span class="text-active">Collapse All</span>
-        </button>'])            
+        )
+    ),
+    col('sm-9',
+        panel(
+            title: $title,
+            actions: [
+                button(text:'Tambah Baru',icon:'plus',onclick:'showTambahPanel()',target:'#'),
+                '<button id="nestable-menu" class="btn btn-sm btn-default active" data-toggle="class:show">
+                    <i class="fa fa-plus text"></i>
+                    <span class="text">Expand All</span>
+                    <i class="fa fa-minus text-active"></i>
+                    <span class="text-active">Collapse All</span>
+                </button>'
+            ],
+            body: panel_body('<div class="dd" id="nestable3">'.$menu_list.'</div>')
+        )
     )
-);
-
+])
 ?>
 <script>
     function edit(id){

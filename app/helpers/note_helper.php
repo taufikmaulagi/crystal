@@ -16,7 +16,7 @@ function template($style='default',$content='templates/empty',$title='Judul belu
     $data['notif_lastest'] = $el->mnotif->read(['users'=>$el->session->userdata('logged_in')['id'],'status'=>'unseen']);
     $data['notif_all'] = $el->mnotif->read(['users'=>$el->session->userdata('logged_in')['id']]);
     $el->load->model('menu_model','mmenu');
-    $res['menu'] = $el->mmenu->read(['parent'=>0]);
+    $res['menu'] = $el->mmenu->read(parent:0);
     $data['menu'] = load_menu($res['menu']);
     $data['sidemenu'] = $data['menu']['menu'];
     $data['bread'] = $data['menu']['bread'];
@@ -59,7 +59,7 @@ function load_menu($item,$class=''){
     $bread = '';
     foreach($item as $key => $val){
         $el->load->model('menu_model','mmenu');
-        $res['menu'] = $el->mmenu->read(['parent'=>$val['id']]);
+        $res['menu'] = $el->mmenu->read(parent: $val['id']);
         $active = '';
         
         // if($val['url']=='/' && empty($el->uri->uri_string())){

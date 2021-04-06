@@ -10,65 +10,75 @@ class Role extends Crystal {
     }
 
     function index(){
-        $data['content'] = 'settings/role/index';
-        $data['role'] = $this->mrole->read();
-        $data['plugin'] = ['datatables'];
-        template($data);
+        template(
+            title: 'Data Seluruh Role',
+            plugin: ['datatables'],
+            content: 'settings/role/index',
+            data: [
+                'role' => $this->mrole->read()
+            ]
+        );
     }
 
     function add(){
         if($this->_validation()){
             $args['data'] = $this->_post_data();
-            if($this->mrole->add($args['data'])>0){
-                flash(['message' => 'Simpan User Group Baru Berhasil','status'=>'success']);
+            if($this->mrole->create($args['data'])>0){
+                $this->flash(['message' => 'Simpan User Group Baru Berhasil','status'=>'success']);
             } else {
-                flash(['message' => 'Simpan User Group Baru Gagal','status'=>'failed']);
+                $this->flash(['message' => 'Simpan User Group Baru Gagal','status'=>'failed']);
             }
-            redirect(base_url('settings/role/add'));
+            redirect(base_url('settings/role/add'),'refresh');
         } else {
-            $data['content'] = 'settings/role/add';
-            template($data);
+            template(
+                title: 'Tambah Role Baru',
+                content: 'settings/role/add'
+            );
         }
     }
 
     function edit($id){
         if(empty($id))
             redirect(base_url('settings/role'));
-        $res['role'] = $this->mrole->read(['id' => $id]);
+        $res['role'] = $this->mrole->read(id: $id);
         if(count($res['role'])<=0)
             redirect(base_url('settings/role'));
         if($this->_validation()){
             $args['data'] = $this->_post_data();
             if($this->mrole->update($args['data'], $id)>0){
-                flash(['message' => 'Update User Group Berhasil','status'=>'success']);
+                $this->flash(['message' => 'Update User Group Berhasil','status'=>'success']);
             } else {
-                flash(['message' => 'Update User Group Gagal','status'=>'failed']);
+                $this->flash(['message' => 'Update User Group Gagal','status'=>'failed']);
             }
-            redirect(base_url('settings/role/edit/'.$id));
+            redirect(base_url('settings/role/edit/'.$id),'refresh');
         } else {
-            $data['content'] = 'settings/role/edit';
-            $data['role'] = $res['role'][0];
-            template($data);
+            template(
+                title: 'Update Role',
+                content: 'settings/role/edit',
+                data: [
+                    'role' => $res['role'][0]
+                ]
+            );
         }
     }
     
     function delete(){
-        if($this->mrole->delete(post('id'))>0){
-            flash(['message'=>'Hapus User Group Berhasil', 'status'=>'success']);
+        if($this->mrole->delete($this->post('id'))>0){
+            $this->flash(['message'=>'Hapus User Group Berhasil', 'status'=>'success']);
         } else {
-            flash(['message'=>'Hapus User Group Gagal', 'status'=>'failed']);
+            $this->flash(['message'=>'Hapus User Group Gagal', 'status'=>'failed']);
         }
-        redirect(base_url('settings/role/'));
+        redirect(base_url('settings/role'));
     }
 
     private function _validation($uniqlist=array()){
-        set_rules('nama','Nama Group','required|max_length[20]');
-        return validation_run();
+        $this->set_rules('nama','Nama Group','required|max_length[20]');
+        return $this->validation_run();
     }
 
     private function _post_data(){
         return [
-            'nama' => post('nama')
+            'nama' => $this->post('nama')
         ];
     }
 

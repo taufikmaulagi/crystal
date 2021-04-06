@@ -2,58 +2,112 @@
 
 $list['privilege'] = '';
 $no=1;
+$role_id = empty($this->input->get('role')) ? 2 : $this->input->get('role');
 foreach($module as $key => $val){
-    $list['access'] = '';
-    foreach($access as $akey => $aval){
-        if($aval['module'] == $val['id']){
-            $checked = '';
-            foreach($permission as $pkey => $pval){
-                if($pval['access'] == $aval['id']){
-                    $checked = 'checked';
-                }
-            }
-            $list['access'] .= '<label class="checkbox-inline m-r">
-                <input type="checkbox" id="inlineCheckbox1" value="option1" '.$checked.' onclick="set_permission('.$aval['id'].')"> '.$aval['nama'].'
-            </label>';
-        }
-    }
     $list['privilege'] .= '<tr>
         <td style="width:1px; white-space:nowrap">'.$no++.'</td>
-        <td style="width:20%">'.$val['nama'].'</td>
-        <td>'.$list['access'].'</td>
+        <td style="width:20%">'.$val['label'].'</td>';
+        $checked='';
+        foreach($permission as $pkey => $pval){
+            if($pval['module'] == $val['id'] && $pval['access'] == 'VIEW' && $pval['role'] == $role_id){
+                $checked='checked';
+            }
+        }
+        $list['privilege'] .= '<td>
+            <label class="checkbox-inline m-r">
+                <input type="checkbox" id="inlineCheckbox1" value="VIEW" onchange="set_permission('.$val['id'].')" '.$checked.'> <b>VIEW</b>
+            </label>
+        </td>';
+        $checked='';
+        foreach($permission as $pkey => $pval){
+            if($pval['module'] == $val['id'] && $pval['access'] == 'ADD' && $pval['role'] == $role_id){
+                $checked='checked';
+            }
+        }
+        $list['privilege'] .= '<td>
+            <label class="checkbox-inline m-r">
+                <input type="checkbox" id="inlineCheckbox1" value="ADD" onchange="set_permission('.$val['id'].')" '.$checked.'> <b>ADD</b>
+            </label>
+        </td>';
+        $checked='';
+        foreach($permission as $pkey => $pval){
+            if($pval['module'] == $val['id'] && $pval['access'] == 'EDIT' && $pval['role'] == $role_id){
+                $checked='checked';
+            }
+        }
+        $list['privilege'] .= '<td>
+            <label class="checkbox-inline m-r">
+                <input type="checkbox" id="inlineCheckbox1" value="EDIT" onchange="set_permission('.$val['id'].')" '.$checked.'> <b>EDIT</b>
+            </label>
+        </td>';
+        $checked='';
+        foreach($permission as $pkey => $pval){
+            if($pval['module'] == $val['id'] && $pval['access'] == 'DELETE' && $pval['role'] == $role_id){
+                $checked='checked';
+            }
+        }
+        $list['privilege'] .= '<td>
+            <label class="checkbox-inline m-r">
+                <input type="checkbox" id="inlineCheckbox1" value="DELETE" onchange="set_permission('.$val['id'].')" '.$checked.'> <b>DELETE</b>
+            </label>
+        </td>';
+        $checked='';
+        foreach($permission as $pkey => $pval){
+            if($pval['module'] == $val['id'] && $pval['access'] == 'EXPORT' && $pval['role'] == $role_id){
+                $checked='checked';
+            }
+        }
+        $list['privilege'] .= '<td>
+            <label class="checkbox-inline m-r">
+                <input type="checkbox" id="inlineCheckbox1" value="EXPORT" onchange="set_permission('.$val['id'].')" '.$checked.'> <b>EXPORT</b>
+            </label>
+        </td>';
+        $checked='';
+        foreach($permission as $pkey => $pval){
+            if($pval['module'] == $val['id'] && $pval['access'] == 'IMPORT' && $pval['role'] == $role_id){
+                $checked='checked';
+            }
+        }
+        $list['privilege'] .= '<td>
+            <label class="checkbox-inline m-r">
+                <input type="checkbox" id="inlineCheckbox1" value="IMPORT" onchange="set_permission('.$val['id'].')" '.$checked.'> <b>IMPORT</b>
+            </label>
+        </td>
     </tr>';
 }
 
 $list['role'] = '';
 foreach($role as $key => $val){
-    $selected = get('role') == $val['id'] ? 'selected="selected"' : '';
+    $selected = $this->input->get('role') == $val['id'] ? 'selected="selected"' : '';
     $list['role'] .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['nama'].'</option>';
 }
 
+echo panel(
+    title: $title,
+    actions: [
 
-
-echo panel(['title'=>$title,'color'=>'primary',
-    'action' => button(['target'=>base_url('settings/users'),'size'=>'xs','color'=>'danger','icon'=>'fa fa-users','text'=>'Seluruh User']).' '.
-                button(['target'=>base_url('settings/module'),'size'=>'xs','color'=>'warning','icon'=>'fa fa-folder-open','text'=>'Module']).' ',
-    'content'=> panel_body(
-        row(
+    ],
+    body: panel_body(
+        row([
             col('sm-9',''
 
-            ).
+            ),
             col('sm-3',
                 '<select class="form-control input-sm" id="srole" onchange="change_role()">'.$list['role'].'</select>'
             )
-        )
+        ])
     ).
-    '<table class="table table-striped">
-        <tr>
-            <th> # </th>
-            <th> Module </th>
-            <th> Permission </th>
-        </tr>
-        '.$list['privilege'].'
-    </table>'
-]);
+    '<div class="table-responsive">
+        <table class="table table-striped">
+            <tr>
+                <th> # </th>
+                <th> Module </th>
+                <th colspan="6">Permission</th>
+            </tr>
+            '.$list['privilege'].'
+        </table>
+    </div>'
+);
 
 ?>
 <script>
@@ -61,11 +115,31 @@ echo panel(['title'=>$title,'color'=>'primary',
         location.replace("<?=base_url('settings/privilege?role=')?>"+$('#srole').val());
     }
 
-    function set_permission(access_id){
+    function set_permission(module){
         $.ajax({
             type:'POST',
             url:'<?=base_url('settings/privilege/set_permission')?>',
-            data: {access_id: access_id, role: $('#srole').val()}
+            data: {
+                module: module, 
+                role: $('#srole').val(), 
+                permission: $(event.target).val()
+            }
         });
+    }
+
+    function set_permission(module){
+        $.ajax({
+            type:'POST',
+            url:'<?=base_url('settings/privilege/set_permission')?>',
+            data: {
+                module: module, 
+                role: $('#srole').val(), 
+                permission: $(event.target).val()
+            }
+        });
+    }
+
+    function set_permission_all(module){
+        
     }
 </script>

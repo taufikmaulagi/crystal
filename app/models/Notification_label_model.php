@@ -16,6 +16,7 @@ class Notification_label_model extends CI_Model {
 
     function update($args,$id){
         $res['label'] = $this->read(['id'=>$id]);
+        if(empty($args['icon'])) unset($args['icon']);
         $this->db->update('notification_label',$args,['id' => $id]);
         if(!empty($res['label'][0]['icon']))
             unlink('./public/images/'.$res['label'][0]['icon']);

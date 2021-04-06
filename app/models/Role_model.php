@@ -2,16 +2,14 @@
 
 class Role_model extends CI_Model {
 
-    function read($args=array()){
-        if(!empty($args['id']))
-            $this->db->where('id',$args['id']);
-        if(!empty($args['!id']))
-            $this->db->where('id != '.$args['!id']);
+    function read($id='',$except=''){
+        if(!empty($id)) $this->db->where('id',$id);
+        if(!empty($except)) $this->db->where('id != '.$except);
         $this->db->where('deleted_at',NULL);
         return $this->db->get('role')->result_array();
     }
 
-    function add($args){
+    function create($args){
         $this->db->insert('role', $args);
         return $this->db->affected_rows();
     }

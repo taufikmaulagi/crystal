@@ -10,22 +10,26 @@ class Privilege extends Crystal {
     }
 
     function index(){
-        $data['content'] = 'settings/privilege/index';
-        $data['module'] = $this->mprivilege->read(['type'=>'module']);
-        $data['access'] = $this->mprivilege->read(['type'=>'access']);
+        $this->load->model('menu_model','mmenu');
         $this->load->model('role_model','mrole');
-        $data['role'] = $this->mrole->read(['!id' => 1]);
-        $id['role'] = empty(get('role')) ? $data['role'][0]['id'] : get('role');
-        $data['permission'] = $this->mprivilege->read(['type'=>'permission','role'=>$id['role']]);
-        template($data);
+        template(
+            title: 'User Privileges',
+            content: 'settings/privilege/index',
+            data: [
+                'module' => $this->mmenu->read(),
+                'permission' => $this->mprivilege->read(['type'=>'permission','role'=>$this->input->get('role')]),
+                'role' => $this->mrole->read(except: 1)
+            ]
+        );
     }
 
     function set_permission(){
-        $access_id = post('access_id');
-        $role = post('role');
-        if(empty($access_id) || empty($role))
-            redirect(base_url('settings/privilege'));
-        $this->mprivilege->set_permission($access_id,$role);
+        $module = $this->post('module');
+        $role = $this->post('role');
+        $permission = $this->post('permission');
+        if(empty($module) || empty($role) || empty($permission))
+            return;
+        echo $this->mprivilege->set_permission($module,$role,$permission);
     }
 
 }

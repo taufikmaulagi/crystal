@@ -12,15 +12,16 @@ foreach($label as $key => $val){
     ]);
 }
 
-echo alert_flashdata('message','status').
-panel(['title'=>$title, 'color'=>'primary', 'action'=>
-    button(['color'=>'primary','text'=>'Tambah Baru','icon'=>'fa fa-plus','size'=>'xs','target'=>base_url('settings/notification_label/add/')]),
-    'content' => datatable(
-        ['#','Icon','Nama Label','Color','Opsi'],
-        $list['label'],[
+alert_flashdata('message','status');
+echo panel(
+        title: $title, 
+        actions: [
+            button(icon:'plus',text:'Tambah Baru',target:base_url('settings/notification_label/add'))        
+        ],
+        body:datatable(['#','Icon','Nama Label','Color','Opsi'],$list['label'],[
             [0,'style="width:50px"'],
             [1,'style="width:80px"'], //icon
             [4,'style="width:80px"']
         ]
     )
-]);
+);

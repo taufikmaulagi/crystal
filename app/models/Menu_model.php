@@ -2,18 +2,15 @@
 
 class Menu_model extends CI_Model {
 
-    function read($args=array()){
-        if(!empty($args['id']))
-            $this->db->where('id',$args['id']);
-        if(isset($args['parent']))
-            $this->db->where('parent',$args['parent']);
+    function read($id='',$parent=''){
+        if(!empty($id)) $this->db->where('id',$id);
+        if($parent!='') $this->db->where('parent',$parent);
         $this->db->order_by('position','asc');
         $this->db->where('deleted_at',NULL);
         return $this->db->get('menu')->result_array();
-        
     }
 
-    function add($args){
+    function create($args){
         $this->db->insert('menu', $args);
         return $this->db->affected_rows();
     }

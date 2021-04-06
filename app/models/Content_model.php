@@ -8,11 +8,11 @@ class Content_model extends CI_Model {
 
     function update($args){
         $res['content'] = $this->read();
+        if(empty($args['logo'])) unset($args['logo']);
+        if(empty($args['favicon'])) unset($args['favicon']);
         $this->db->update('content',$args, ['id' => 1]);
-        if(!empty($args['logo']))
-            unlink('./public/images/'.$res['content']['logo']);
-        if(!empty($args['favicon']))
-            unlink('./public/images/'.$res['content']['favicon']);
+        if(!empty($args['logo'])) unlink('./public/images/'.$res['content']['logo']);
+        if(!empty($args['favicon'])) unlink('./public/images/'.$res['content']['favicon']);
         return $this->db->affected_rows();
     }
 

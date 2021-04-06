@@ -13,32 +13,35 @@ class Menu extends Crystal {
 
     function index(){
         if($this->_validation()){
-            if(get('state')=='add'){
+            if($this->get('state')=='add'){
                 $args['menu'] = $this->_post_data();
                 $args['menu']['parent'] = 0;
-                $res['menu'] = $this->mmenu->read(['parent'=>0]);
+                $res['menu'] = $this->mmenu->read(parent:0);
                 $args['menu']['position'] = intval($res['menu'][count($res['menu'])-1]['positon'])+1;
                 if($this->mmenu->add($args['menu'])>0){
-                    flash(['message'=>'Simpan Menu Baru Berhasil','status'=>'success']);
+                    $this->flash(['message'=>'Simpan Menu Baru Berhasil','status'=>'success']);
                 } else {
-                    flash(['message'=>'Simpan Menu Baru Gagal','status'=>'failed']);
+                    $this->flash(['message'=>'Simpan Menu Baru Gagal','status'=>'failed']);
                 }
                 redirect(base_url('settings/menu'));
-            } else if(get('state')=='edit'){
+            } else if($this->get('state')=='update'){
                 $args['menu'] = $this->_post_data();
-                if($this->mmenu->update($args['menu'],post('id'))>0){
-                    flash(['message'=>'Update Menu Berhasil','status'=>'success']);
+                if($this->mmenu->update($args['menu'],$this->post('id'))>0){
+                    $this->flash(['message'=>'Update Menu Berhasil','status'=>'success']);
                 } else {
-                    flash(['message'=>'Update Menu Gagal','status'=>'failed']);
+                    $this->flash(['message'=>'Update Menu Gagal','status'=>'failed']);
                 }
                 redirect(base_url('settings/menu'));
             }
         } else {
-            $list['item'] = $this->mmenu->read(['parent'=>0]);
-            $data['menu'] = $this->_load_menu($list['item']);
-            $data['content'] = 'settings/menu/index';
-            $data['plugin'] = ['nestable'];
-            template($data);
+            $list['item'] = $this->mmenu->read(parent:0);
+            template(
+                content: 'settings/menu/index',
+                plugin: ['nestable'],
+                data: [
+                    'menu_list' => $this->_load_menu($list['item']),
+                ]
+            );
         }
     }
 
@@ -50,10 +53,10 @@ class Menu extends Crystal {
                         <div class="dd-handle dd3-handle" style="background-color:black; text-color:white">&nbsp;&nbsp;&nbsp;</div><div class="dd3-content">
                             <i class="'.$val['icon'].'"></i>&nbsp;&nbsp;'.$val['label'].'
                             <div style="float:right">
-                                <b>'.$val['url'].'</b> | &nbsp;&nbsp;'.button_icon(['icon'=>'fa fa-pencil','size'=>'xs','onclick'=>'edit('.$val['id'].')','color'=>'warning']).' '.action_button(base_url('settings/menu/delete'),$val['id'],['delete']).'
+                                <b>'.$val['url'].'</b> | &nbsp;&nbsp;'.button_icon(icon:'pencil',size:'xs',onclick:'edit('.$val['id'].')',theme:'warning',target:'#').' '.action_button(base_url('settings/menu/delete'),$val['id'],['delete']).'
                             </div>
                         </div>';
-                            $item['menu'] = $this->db->get_where('menu',['parent' => $val['id']])->result_array();
+                            $item['menu'] = $this->mmenu->read(parent: $val['id']);
                             if(count($item['menu'])>0){
                                 $html.=$this->_load_menu($item['menu']);
                             }
@@ -66,10 +69,10 @@ class Menu extends Crystal {
     }
 
     function delete(){
-        if($this->mmenu->delete(post('id'))>0){
-            flash(['message'=>'Hapus Menu Berhasil', 'status'=>'success']);
+        if($this->mmenu->delete($this->post('id'))>0){
+            $this->flash(['message'=>'Hapus Menu Berhasil', 'status'=>'success']);
         } else {
-            flash(['message'=>'Hapus Menu Gagal', 'status'=>'failed']);
+            $this->flash(['message'=>'Hapus Menu Gagal', 'status'=>'failed']);
         }
         redirect(base_url('settings/menu/'));
     }
@@ -84,7 +87,7 @@ class Menu extends Crystal {
     function ajx_get_detail($id){
         if(empty($id))
             return;
-        echo json_encode($this->mmenu->read(['id' => $id]));
+        echo json_encode($this->mmenu->read(id: $id));
     }
 
     private function _organize($item,$parent){
@@ -98,17 +101,17 @@ class Menu extends Crystal {
     }
 
     private function _validation($uniqlist=array()){
-        set_rules('label','Label','required|max_length[50]');
-        set_rules('url','URL','required|max_length[100]');
-        set_rules('icon','Icon','required|max_length[20]');
-        return validation_run();
+        $this->set_rules('label','Label','required|max_length[50]');
+        $this->set_rules('url','URL','required|max_length[100]');
+        $this->set_rules('icon','Icon','required|max_length[20]');
+        return $this->validation_run();
     }
 
     private function _post_data(){
         return [
-            'label' => post('label'),
-            'url' => post('url'),
-            'icon' => post('icon')
+            'label' => $this->post('label'),
+            'url' => $this->post('url'),
+            'icon' => $this->post('icon')
         ];
     }
 

@@ -7,7 +7,8 @@ function panel($theme='primary', $body='', $title='', $actions=[], $hidden='', $
     foreach($actions as $key => $val){
         $html['actions'] .= $val.'&nbsp;&nbsp';
     }
-    return '<section '.$id.' class="panel panel-'.$theme.'" '.$hidden.'>
+    $id = !empty($id) ? ' id="'.$id.'"' : '';
+    return '<section'.$id.' class="panel panel-'.$theme.'" '.$hidden.'>
         <header class="panel-heading">
             <div class="row">
                 <div class="col-sm-6" style="font-size:20px">
@@ -254,6 +255,7 @@ function action_button($url,$id,$avail=['edit','delete']){
 
 function image($image='default.png', $path='public/images/', $style='', $class=''){
     $style = !empty($args['style']) ? 'style="'.$args['style'].'"' : 'style="width:100%"';
+    $image= !empty($image) ? $image : 'default.png';
     if(empty($image))
         $image = 'default.png';
     return '<img class="'.$class.'" src="'.base_url($path.$image).'" '.$style.'>';
