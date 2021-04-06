@@ -99,3 +99,13 @@ function load_menu($item,$class=''){
     $html .= '</ul>';
     return ['menu' => $html, 'bread'=>$bread];
 }
+
+function is_unlock($access, $body=''){
+    $cry =& get_instance();
+    $access = explode('|',$access);
+    $res['permission'] = $cry->db->get_where('permission', ['access'=>$access[1],'module'=>$access[0],'role'=>$cry->session->userdata('logged_in')['role']])->result_array();
+    if(count($res['permission'])>0){
+        if(!empty($body)) return $body; else return 1;
+    }
+    return;
+}

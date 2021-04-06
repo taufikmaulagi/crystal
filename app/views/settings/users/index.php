@@ -24,7 +24,7 @@ alert_flashdata('message', 'status');
 echo panel(
     title: 'Data Seluruh Users',
     actions: [
-        button(theme: 'primary',text: 'Tambah Baru',target:base_url('settings/users/add'),icon:'plus'),
+        is_unlock('Users|ADD', button(theme: 'primary',text: 'Tambah Baru',target:base_url('settings/users/add'),icon:'plus')),
         button(theme: 'warning',text: 'Role',target:base_url('settings/role'),icon:'users'),
         button(theme: 'danger',text: 'Privileges',target:base_url('settings/privileges'),icon:'unlock'),
     ],

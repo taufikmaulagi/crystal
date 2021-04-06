@@ -51,6 +51,7 @@ class Auth extends CI_Controller {
                     'nama' => $res['user'][0]['nama'],
                     'foto' => $res['user'][0]['foto'],
                     'jenis_kelamin' => $res['user'][0]['jenis_kelamin'],
+                    'role' => $res['user'][0]['role'],
                     'token' => $data['users']['token'],
                     'token2' => $data['users']['token2']
                 ]);
