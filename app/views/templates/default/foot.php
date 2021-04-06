@@ -73,6 +73,8 @@
     });
 
     function write_url(url){
+      if(url == 'add' || url == 'edit')
+        return '';
       if(url)
         return '/'+url;
       else 
