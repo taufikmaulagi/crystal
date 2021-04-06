@@ -12,8 +12,9 @@ class Menu extends Crystal {
     }
 
     function index(){
+        $this->unlock('Menu Manager|VIEW');
         if($this->_validation()){
-            if($this->get('state')=='add'){
+            if($this->get('state')=='add' && is_unlock('Menu Manager|ADD')){
                 $args['menu'] = $this->_post_data();
                 $args['menu']['parent'] = 0;
                 $res['menu'] = $this->mmenu->read(parent:0);
@@ -24,7 +25,7 @@ class Menu extends Crystal {
                     $this->flash(['message'=>'Simpan Menu Baru Gagal','status'=>'failed']);
                 }
                 redirect(base_url('settings/menu'));
-            } else if($this->get('state')=='update'){
+            } else if($this->get('state')=='update' && is_unlock('Menu Manager|EDIT')){
                 $args['menu'] = $this->_post_data();
                 if($this->mmenu->update($args['menu'],$this->post('id'))>0){
                     $this->flash(['message'=>'Update Menu Berhasil','status'=>'success']);
@@ -53,7 +54,7 @@ class Menu extends Crystal {
                         <div class="dd-handle dd3-handle" style="background-color:black; text-color:white">&nbsp;&nbsp;&nbsp;</div><div class="dd3-content">
                             <i class="'.$val['icon'].'"></i>&nbsp;&nbsp;'.$val['label'].'
                             <div style="float:right">
-                                <b>'.$val['url'].'</b> | &nbsp;&nbsp;'.button_icon(icon:'pencil',size:'xs',onclick:'edit('.$val['id'].')',theme:'warning',target:'#').' '.action_button(base_url('settings/menu/delete'),$val['id'],['delete']).'
+                                <b>'.$val['url'].'</b> | &nbsp;&nbsp;'.is_unlock('Menu Manager|EDIT',button_icon(icon:'pencil',size:'xs',onclick:'edit('.$val['id'].')',theme:'warning',target:'#')).' '.action_button(base_url('settings/menu/delete'),$val['id'],['delete'],module: 'Menu').'
                             </div>
                         </div>';
                             $item['menu'] = $this->mmenu->read(parent: $val['id']);
@@ -69,6 +70,7 @@ class Menu extends Crystal {
     }
 
     function delete(){
+        $this->unlock('Menu Manager|ADD');
         if($this->mmenu->delete($this->post('id'))>0){
             $this->flash(['message'=>'Hapus Menu Berhasil', 'status'=>'success']);
         } else {
@@ -78,6 +80,7 @@ class Menu extends Crystal {
     }
 
     function ajx_organize(){
+        if(is_unlock('Menu Manager|VIEW')) return;
         $data = $this->input->post('data');
         if(empty($data))
             return;
@@ -85,6 +88,7 @@ class Menu extends Crystal {
     }
 
     function ajx_get_detail($id){
+        if(is_unlock('Menu Manager|VIEW')) return;
         if(empty($id))
             return;
         echo json_encode($this->mmenu->read(id: $id));

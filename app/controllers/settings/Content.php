@@ -9,14 +9,17 @@ class Content extends Crystal {
     }
 
     function index(){
+        $this->unlock('Content|VIEW');
         if($this->_validation()){
-            $args['update'] = $this->_post_data();
-            $args['update']['logo'] = $this->uploader('logo','logo',types: 'png|jpg|jpeg|svg');
-            $args['update']['favicon'] = $this->uploader('favicon','favicon',types: 'png|jpg|jpeg|svg|ico');
-            if($this->mcontent->update($args['update'])){
-                $this->flash(['message'=>'Update Content Berhasil','status'=>'success']);
-            } else {
-                $this->flash(['message'=>'Update Content Gagal','status'=>'failed']);
+            if(is_unlock('Content|EDIT')){
+                $args['update'] = $this->_post_data();
+                $args['update']['logo'] = $this->uploader('logo','logo',types: 'png|jpg|jpeg|svg');
+                $args['update']['favicon'] = $this->uploader('favicon','favicon',types: 'png|jpg|jpeg|svg|ico');
+                if($this->mcontent->update($args['update'])){
+                    $this->flash(['message'=>'Update Content Berhasil','status'=>'success']);
+                } else {
+                    $this->flash(['message'=>'Update Content Gagal','status'=>'failed']);
+                }
             }
             redirect(base_url('settings/content'));
         } else {

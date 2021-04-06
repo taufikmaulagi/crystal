@@ -232,23 +232,43 @@ function input_submit($value, $color="primary"){
     return '<p>&nbsp;</p><button type="submit" class="btn btn-'.$color.'"><i class="fa fa-check"></i>&nbsp;&nbsp;'.$value.'</button>';
 }
 
-function action_button($url,$id,$avail=['edit','delete']){
+function action_button($url,$id,$avail=['edit','delete'],$module=''){
     $action = '';
     if(in_array('edit',$avail)){
-        $action.=button_icon(
-            theme: 'warning',
-            icon: 'pencil',
-            target: $url.'/edit/'.$id,
-            size: 'xs'
-        );
+        if(!empty($module)){
+            $action .= is_unlock($module.'|EDIT', button_icon(
+                theme: 'warning',
+                icon: 'pencil',
+                target: $url.'/edit/'.$id,
+                size: 'xs'
+            ));
+        } else {
+            $action.= button_icon(
+                theme: 'warning',
+                icon: 'pencil',
+                target: $url.'/edit/'.$id,
+                size: 'xs'
+            );
+        }
     }
     if(in_array('delete',$avail)){
-        $action.='&nbsp;&nbsp;<button class="btn btn-xs btn-danger" data-toggle="popover" data-html="true" data-placement="left" 
-            data-content=\'<form method="post" action="'.$url.'/delete/">
-                <input type="hidden" name="id" value="'.$id.'">
-                <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;Iya, Hapus !</button>
-            </form>\' title="" data-original-title=\'<button type="button" class="close pull-right" data-dismiss="popover">&times;</button>Anda Yakin ?\'>
-        <i class="fa fa-trash-o"></i></button>';
+        if(!empty($module)){
+            $action .= is_unlock($module.'|DELETE', 
+                '&nbsp;&nbsp;<button class="btn btn-xs btn-danger" data-toggle="popover" data-html="true" data-placement="left" 
+                    data-content=\'<form method="post" action="'.$url.'/delete/">
+                        <input type="hidden" name="id" value="'.$id.'">
+                        <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;Iya, Hapus !</button>
+                    </form>\' title="" data-original-title=\'<button type="button" class="close pull-right" data-dismiss="popover">&times;</button>Anda Yakin ?\'>
+                <i class="fa fa-trash-o"></i></button>'
+            );
+        } else {
+            $action.='&nbsp;&nbsp;<button class="btn btn-xs btn-danger" data-toggle="popover" data-html="true" data-placement="left" 
+                data-content=\'<form method="post" action="'.$url.'/delete/">
+                    <input type="hidden" name="id" value="'.$id.'">
+                    <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;Iya, Hapus !</button>
+                </form>\' title="" data-original-title=\'<button type="button" class="close pull-right" data-dismiss="popover">&times;</button>Anda Yakin ?\'>
+            <i class="fa fa-trash-o"></i></button>';
+        }
     }
     return $action;
 }

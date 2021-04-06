@@ -12,6 +12,7 @@ class Users extends Crystal {
     }
 
     function index(){
+        $this->unlock('Users|VIEW');
         $this->load->model('role_model','mrole');
         template(
             title: 'Data Seluruh User',
@@ -25,6 +26,7 @@ class Users extends Crystal {
     }
 
     function add(){
+        $this->unlock('Users|ADD');
         if($this->_validation()){
             $args['data'] = $this->_post_data();
             $args['data']['foto'] = $this->uploader('foto','user');
@@ -46,6 +48,7 @@ class Users extends Crystal {
     }
 
     function edit($id){
+        $this->unlock('Users|EDIT');
         if(empty($id))
             redirect(base_url('settings/users'));
         $res['user'] = $this->musers->read(id: $id);
@@ -80,6 +83,7 @@ class Users extends Crystal {
     }
     
     function delete(){
+        $this->unlock('Users|DELETE');
         if($this->musers->delete($this->post('id'))>0){
             $this->flash(['message'=>'Hapus User Berhasil', 'status'=>'success']);
         } else {

@@ -8,7 +8,7 @@ foreach($label as $key => $val){
         image($val['icon']),
         $val['nama'],
         '<span class="text-'.$val['color'].'"><i class="fa fa-circle"></i></i> '.$val['color'],
-        action_button(base_url('settings/notification_label'), $val['id'])
+        action_button(base_url('settings/notification_label'), $val['id'], module: ('Notification Label'))
     ]);
 }
 

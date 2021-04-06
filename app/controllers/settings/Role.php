@@ -10,6 +10,7 @@ class Role extends Crystal {
     }
 
     function index(){
+        $this->unlock('Role|VIEW');
         template(
             title: 'Data Seluruh Role',
             plugin: ['datatables'],
@@ -21,6 +22,7 @@ class Role extends Crystal {
     }
 
     function add(){
+        $this->unlock('Role|ADD');
         if($this->_validation()){
             $args['data'] = $this->_post_data();
             if($this->mrole->create($args['data'])>0){
@@ -38,6 +40,7 @@ class Role extends Crystal {
     }
 
     function edit($id){
+        $this->unlock('Role|EDIT');
         if(empty($id))
             redirect(base_url('settings/role'));
         $res['role'] = $this->mrole->read(id: $id);
@@ -63,6 +66,7 @@ class Role extends Crystal {
     }
     
     function delete(){
+        $this->unlock('Role|DELETE');
         if($this->mrole->delete($this->post('id'))>0){
             $this->flash(['message'=>'Hapus User Group Berhasil', 'status'=>'success']);
         } else {

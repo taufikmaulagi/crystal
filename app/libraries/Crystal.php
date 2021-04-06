@@ -57,4 +57,10 @@ class Crystal extends CI_Controller {
         return $el->session->set_flashdata($flash);
     }
 
+    function unlock($access){
+        if(!is_unlock($access)){
+            redirect(base_url());
+        }
+    }
+
 }

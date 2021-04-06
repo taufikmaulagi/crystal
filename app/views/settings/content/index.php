@@ -14,7 +14,7 @@ panel(
                 input_image('Logo','logo',$main['logo']),
                 input('Tahun Rilis','tahun_rilis',$main['tahun_rilis']),
                 input_image('Favicon','favicon',$main['favicon']),
-                input_submit('Simpan Perubahan'),
+                is_unlock('Content|EDIT', input_submit('Simpan Perubahan')),
             ]
         )
     )

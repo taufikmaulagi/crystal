@@ -4,39 +4,41 @@ $hidden['edit'] = $this->input->get('state') == 'edit' ? 'show' : 'hidden';
 
 alert_flashdata('message','status');
 echo row([
-    col('sm-3',
-        panel(
-            id: 'tambahMenu',
-            hidden: $hidden['add'],
-            title: 'Tambah',
-            theme: 'success',
-            body: panel_body(
-                form(
-                    action: base_url('settings/menu?state=add'),
-                    form : [
-                        input('Label','label'),
-                        input('URL','url'),
-                        input('Icon','icon'),
-                        input_submit('Selesai & Simpan')
-                    ]
+        is_unlock('Menu Manager|ADD', col('sm-3',
+            panel(
+                id: 'tambahMenu',
+                hidden: $hidden['add'],
+                title: 'Tambah',
+                theme: 'success',
+                body: panel_body(
+                    form(
+                        action: base_url('settings/menu?state=add'),
+                        form : [
+                            input('Label','label'),
+                            input('URL','url'),
+                            input('Icon','icon'),
+                            input_submit('Selesai & Simpan')
+                        ]
+                    )
                 )
             )
         ).
-        panel(
-            id: 'editMenu',
-            hidden: $hidden['edit'],
-            title: 'Update',
-            theme: 'warning',
-            body: panel_body(
-                form(
-                    action: base_url('settings/menu?state=update'),
-                    form : [
-                        input_hidden('id'),
-                        input('Label','label',type:'text'),
-                        input('URL','url',type:'text'),
-                        input('Icon','icon',type:'text'),
-                        input_submit('Selesai & Simpan')
-                    ]
+        is_unlock('Menu Manager|EDIT',panel(
+                id: 'editMenu',
+                hidden: $hidden['edit'],
+                title: 'Update',
+                theme: 'warning',
+                body: panel_body(
+                    form(
+                        action: base_url('settings/menu?state=update'),
+                        form : [
+                            input_hidden('id'),
+                            input('Label','label',type:'text'),
+                            input('URL','url',type:'text'),
+                            input('Icon','icon',type:'text'),
+                            input_submit('Selesai & Simpan')
+                        ]
+                    )
                 )
             )
         )
@@ -45,7 +47,7 @@ echo row([
         panel(
             title: $title,
             actions: [
-                button(text:'Tambah Baru',icon:'plus',onclick:'showTambahPanel()',target:'#'),
+                is_unlock('Menu Manager|ADD', button(text:'Tambah Baru',icon:'plus',onclick:'showTambahPanel()',target:'#')),
                 '<button id="nestable-menu" class="btn btn-sm btn-default active" data-toggle="class:show">
                     <i class="fa fa-plus text"></i>
                     <span class="text">Expand All</span>

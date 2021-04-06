@@ -8,6 +8,7 @@ class  Notification_label extends Crystal {
     }
 
     function index(){
+        $this->unlock('Notification Label|VIEW');
         template(
             title: 'Notification Label',
             content: 'settings/notification_label/index',
@@ -19,6 +20,7 @@ class  Notification_label extends Crystal {
     }
 
     function add(){
+        $this->unlock('Notification Label|ADD');
         if($this->_validation()){
             $args['label'] = $this->_postdata();
             $args['label']['icon'] = $this->uploader('icon','nlabel');
@@ -37,6 +39,7 @@ class  Notification_label extends Crystal {
     }
 
     function edit($id){
+        $this->unlock('Notification Label|EDIT');
         if(empty($id)){ redirect(base_url('settings/notification_label')); }
         $res['label'] = $this->mnotiflabel->read(['id'=>$id]);
         if(count($res['label'])<=0){ redirect(base_url('settings/notification_label')); }
@@ -61,6 +64,7 @@ class  Notification_label extends Crystal {
     }
 
     function delete(){
+        $this->unlock('Notification Label|DELETE');
         if($this->mnotiflabel->delete($this->post('id'))>0){
             $this->flash(['message'=>'Label telah dihapus', 'status'=>'success']);
         } else {

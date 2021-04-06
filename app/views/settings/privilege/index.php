@@ -85,7 +85,8 @@ foreach($role as $key => $val){
 echo panel(
     title: $title,
     actions: [
-
+        is_unlock('Users|VIEW', button(theme: 'info',text: 'Users',target:base_url('settings/users'),icon:'users')),
+        is_unlock('Role|VIEW', button(theme: 'warning',text: 'Role',target:base_url('settings/role'),icon:'users')),
     ],
     body: panel_body(
         row([

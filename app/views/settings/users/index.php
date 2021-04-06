@@ -10,7 +10,7 @@ foreach($user as $key => $val){
         badge($val['role']), 
         table_text($val['email']), 
         ftime('%d %B %Y %H:%M', $val['created_at']), 
-        action_button(base_url('settings/users'),$val['id'])
+        action_button(base_url('settings/users'),$val['id'],module:'Users')
     ]);
 }
 $list['role'] = array(['id'=>'','text'=>'-- Semua Role --']);
@@ -25,8 +25,8 @@ echo panel(
     title: 'Data Seluruh Users',
     actions: [
         is_unlock('Users|ADD', button(theme: 'primary',text: 'Tambah Baru',target:base_url('settings/users/add'),icon:'plus')),
-        button(theme: 'warning',text: 'Role',target:base_url('settings/role'),icon:'users'),
-        button(theme: 'danger',text: 'Privileges',target:base_url('settings/privileges'),icon:'unlock'),
+        is_unlock('Role|VIEW', button(theme: 'warning',text: 'Role',target:base_url('settings/role'),icon:'users')),
+        is_unlock('User Privileges|VIEW', button(theme: 'danger',text: 'Privileges',target:base_url('settings/privilege'),icon:'unlock')),
     ],
     body: panel_body(
         row([

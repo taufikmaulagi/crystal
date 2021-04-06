@@ -10,6 +10,7 @@ class Privilege extends Crystal {
     }
 
     function index(){
+        $this->unlock('User Privileges|VIEW');
         $this->load->model('menu_model','mmenu');
         $this->load->model('role_model','mrole');
         template(
@@ -24,6 +25,9 @@ class Privilege extends Crystal {
     }
 
     function set_permission(){
+        $this->unlock('User Privileges|ADD');
+        $this->unlock('User Privileges|EDIT');
+        $this->unlock('User Privileges|DELETE');
         $module = $this->post('module');
         $role = $this->post('role');
         $permission = $this->post('permission');

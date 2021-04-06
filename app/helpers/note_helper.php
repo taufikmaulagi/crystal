@@ -71,30 +71,32 @@ function load_menu($item,$class=''){
         //     $bread .= '&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;<i class="'.$val['icon'].'"></i>&nbsp;&nbsp;'.$val['label'];
         //     $active = 'class="active"';
         // }
-        $html .= '<li '.$active.'>
-                    <a href="'.base_url($val['url']).'"  >';
-        if($val['parent']!=0){
-            $html.= '<i class="fa fa-angle-right"></i>';
-        } else {
-            $html.= '<i class="'.$val['icon'].' icon">
-                        <b class="bg-success"></b>
-                    </i>';
-        }
-                if(count($res['menu'])>0){
-                    $html.='<span class="pull-right">
-                    <i class="fa fa-angle-down text"></i>
-                    <i class="fa fa-angle-up text-active"></i>
-                  </span>';
-                }
-        $html .= '<span>'.$val['label'].'</span>
-                    </a>';
-            if(count($res['menu'])>0){
-                $data['menu'] = load_menu($res['menu'],'lt');
-                $html.= $data['menu']['menu'];
-                $bread.= $data['menu']['bread'];
-
+        if(is_unlock($val['label'].'|VIEW')){
+            $html .= '<li '.$active.'>
+                        <a href="'.base_url($val['url']).'"  >';
+            if($val['parent']!=0){
+                $html.= '<i class="fa fa-angle-right"></i>';
+            } else {
+                $html.= '<i class="'.$val['icon'].' icon">
+                            <b class="bg-success"></b>
+                        </i>';
             }
-        $html .= '</li>';
+                    if(count($res['menu'])>0){
+                        $html.='<span class="pull-right">
+                        <i class="fa fa-angle-down text"></i>
+                        <i class="fa fa-angle-up text-active"></i>
+                    </span>';
+                    }
+            $html .= '<span>'.$val['label'].'</span>
+                        </a>';
+                if(count($res['menu'])>0){
+                    $data['menu'] = load_menu($res['menu'],'lt');
+                    $html.= $data['menu']['menu'];
+                    $bread.= $data['menu']['bread'];
+
+                }
+            $html .= '</li>';
+        }
     }
     $html .= '</ul>';
     return ['menu' => $html, 'bread'=>$bread];
@@ -102,8 +104,12 @@ function load_menu($item,$class=''){
 
 function is_unlock($access, $body=''){
     $cry =& get_instance();
+    if($cry->session->userdata('logged_in')['role'] == 1){
+        if(!empty($body)) return $body; else return 1;
+    }
     $access = explode('|',$access);
-    $res['permission'] = $cry->db->get_where('permission', ['access'=>$access[1],'module'=>$access[0],'role'=>$cry->session->userdata('logged_in')['role']])->result_array();
+    $cry->db->join('menu','permission.module = menu.id');
+    $res['permission'] = $cry->db->get_where('permission', ['access'=>$access[1],'menu.label'=>$access[0],'role'=>$cry->session->userdata('logged_in')['role']])->result_array();
     if(count($res['permission'])>0){
         if(!empty($body)) return $body; else return 1;
     }
