@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 26 Mar 2021 pada 18.05
+-- Waktu pembuatan: 06 Apr 2021 pada 12.30
 -- Versi server: 8.0.23-0ubuntu0.20.04.1
--- Versi PHP: 7.4.3
+-- Versi PHP: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,32 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `elevens`
+-- Database: `crystal`
 --
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `access`
---
-
-CREATE TABLE `access` (
-  `id` smallint UNSIGNED NOT NULL,
-  `module` smallint UNSIGNED NOT NULL,
-  `nama` varchar(30) NOT NULL,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data untuk tabel `access`
---
-
-INSERT INTO `access` (`id`, `module`, `nama`, `deleted_at`) VALUES
-(1, 1, 'View', NULL),
-(2, 1, 'Add', NULL),
-(3, 1, 'Edit', NULL),
-(4, 1, 'Delete', NULL),
-(5, 2, 'View', NULL);
 
 -- --------------------------------------------------------
 
@@ -70,7 +46,7 @@ CREATE TABLE `content` (
 --
 
 INSERT INTO `content` (`id`, `nama`, `deskripsi_pendek`, `deskripsi`, `email`, `notelp`, `no_hp`, `logo`, `favicon`, `tahun_rilis`, `updated_at`) VALUES
-(1, 'Crystal', 'Ultimate Web Admin Stater Kit v0.2', 'Ultimate Web Admin App Stater Kit v0.2', NULL, NULL, NULL, 'logo-6059b1df0bc46.png', 'favicon-6059b1df0c41f.png', 2020, '2021-03-23 16:16:15');
+(1, 'Crytal Dev', 'Web Admin Starter Kit v0.4', 'Web Admin Starter Kit v0.4', 'crystal@flexfy.my.id', NULL, NULL, 'logo-606be8ec1f58b.png', 'favicon-606be845c2a9f.svg', 2020, '2021-04-06 11:51:56');
 
 -- --------------------------------------------------------
 
@@ -79,7 +55,7 @@ INSERT INTO `content` (`id`, `nama`, `deskripsi_pendek`, `deskripsi`, `email`, `
 --
 
 CREATE TABLE `menu` (
-  `id` tinyint NOT NULL,
+  `id` tinyint UNSIGNED NOT NULL,
   `label` varchar(50) NOT NULL,
   `url` varchar(100) NOT NULL,
   `icon` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
@@ -95,34 +71,14 @@ CREATE TABLE `menu` (
 INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`, `position`, `deleted_at`) VALUES
 (1, 'Settings', '#settings', 'fa fa-gear', 0, 2, NULL),
 (2, 'Users / Admin', 'settings/users/', 'fa fa-users', 1, 1, NULL),
-(3, 'Dashboard', '/', 'fa fa-star', 0, 1, NULL),
-(4, 'User Privileges', 'settings/privilege/', 'fa fa-lock', 1, 2, NULL),
-(5, 'Menu Manager', 'settings/menu/', 'fa fa-align-justify', 1, 3, NULL),
-(7, 'Role', 'settings/role/', 'fa fa-users', 1, 4, NULL),
-(8, 'Module', 'settings/module/', 'fa fa-folder', 1, 5, NULL),
-(12, 'Access', 'settings/access/', 'fa fa-folder-open', 1, 6, NULL),
-(13, 'Content', 'settings/content/', 'fa fa-rss-square', 1, 7, NULL),
-(15, 'Notification Label', 'settings/notification_label/', 'fa fa-check-square', 1, 8, NULL);
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `module`
---
-
-CREATE TABLE `module` (
-  `id` smallint UNSIGNED NOT NULL,
-  `nama` varchar(50) NOT NULL,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data untuk tabel `module`
---
-
-INSERT INTO `module` (`id`, `nama`, `deleted_at`) VALUES
-(1, 'Users', NULL),
-(2, 'Role', NULL);
+(3, 'Dashboard', '/', 'fa fa-tachometer', 0, 1, NULL),
+(4, 'User Privileges', 'settings/privilege/', 'fa fa-lock', 1, 3, NULL),
+(5, 'Menu Manager', 'settings/menu/', 'fa fa-align-justify', 1, 4, NULL),
+(7, 'Role', 'settings/role/', 'fa fa-users', 1, 2, NULL),
+(8, 'Module', 'settings/module/', 'fa fa-folder', 7, 1, '2021-04-05 07:59:43'),
+(12, 'Access', 'settings/access/', 'fa fa-folder-open', 1, 6, '2021-04-05 08:03:11'),
+(13, 'Content', 'settings/content/', 'fa fa-rss-square', 1, 5, NULL),
+(15, 'Notification Label', 'settings/notification_label/', 'fa fa-check-square', 1, 6, NULL);
 
 -- --------------------------------------------------------
 
@@ -173,7 +129,8 @@ CREATE TABLE `notification_label` (
 INSERT INTO `notification_label` (`id`, `nama`, `icon`, `color`, `created_at`, `deleted_at`) VALUES
 (1, 'General', 'nlabel-605dadc1599eb.png', 'primary', '2021-03-24 13:54:47', NULL),
 (2, 'Important', 'important.png', 'danger', '2021-03-24 13:54:47', NULL),
-(3, 'New', 'nlabel-605dadce269cb.png', 'success', '2021-03-26 15:29:49', NULL);
+(3, 'New', 'nlabel-606bf0e30a09f.png', 'info', '2021-03-26 15:29:49', NULL),
+(4, 'New 2', 'nlabel-606bed40d4824.jpg', 'default', '2021-04-06 12:10:24', '2021-04-06 12:26:05');
 
 -- --------------------------------------------------------
 
@@ -182,25 +139,46 @@ INSERT INTO `notification_label` (`id`, `nama`, `icon`, `color`, `created_at`, `
 --
 
 CREATE TABLE `permission` (
+  `id` mediumint UNSIGNED NOT NULL,
   `role` tinyint UNSIGNED NOT NULL,
-  `access` smallint UNSIGNED NOT NULL
+  `module` tinyint UNSIGNED NOT NULL,
+  `access` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data untuk tabel `permission`
 --
 
-INSERT INTO `permission` (`role`, `access`) VALUES
-(3, 5),
-(3, 2),
-(2, 1),
-(2, 2),
-(3, 4),
-(2, 5),
-(2, 3),
-(2, 4),
-(3, 3),
-(3, 1);
+INSERT INTO `permission` (`id`, `role`, `module`, `access`) VALUES
+(57, 3, 2, 'option1'),
+(62, 3, 3, 'EXPORT'),
+(63, 3, 3, 'DELETE'),
+(64, 3, 1, 'VIEW'),
+(65, 3, 3, 'VIEW'),
+(66, 2, 2, 'VIEW'),
+(67, 2, 3, 'VIEW'),
+(69, 2, 7, 'VIEW'),
+(70, 2, 4, 'VIEW'),
+(72, 2, 1, 'VIEW'),
+(73, 3, 7, 'ADD'),
+(74, 3, 7, 'EDIT'),
+(75, 3, 4, 'DELETE'),
+(76, 3, 5, 'DELETE'),
+(77, 3, 5, 'EDIT'),
+(78, 3, 13, 'EDIT'),
+(79, 3, 13, 'ADD'),
+(80, 3, 13, 'VIEW'),
+(81, 2, 2, 'ADD'),
+(82, 2, 3, 'ADD'),
+(83, 2, 4, 'ADD'),
+(84, 2, 1, 'ADD'),
+(85, 2, 7, 'ADD'),
+(86, 2, 5, 'VIEW'),
+(87, 2, 13, 'VIEW'),
+(88, 2, 15, 'VIEW'),
+(89, 2, 5, 'ADD'),
+(90, 2, 13, 'ADD'),
+(91, 2, 15, 'ADD');
 
 -- --------------------------------------------------------
 
@@ -221,7 +199,8 @@ CREATE TABLE `role` (
 INSERT INTO `role` (`id`, `nama`, `deleted_at`) VALUES
 (1, 'Superadmin', NULL),
 (2, 'Admin', NULL),
-(3, 'Guest', NULL);
+(3, 'Guest', NULL),
+(4, 'Guse', '2021-04-04 18:57:46');
 
 -- --------------------------------------------------------
 
@@ -249,11 +228,15 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `nama`, `tanggal_lahir`, `jenis_kelamin`, `foto`, `username`, `email`, `role`, `password`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Taufik Maulana', NULL, NULL, NULL, 'superadmin', 'taufikm9977@gmail.com', 1, '880d5b05cc01fac8261f9e84406e6c02dfe187d8', '2021-03-15 19:48:05', '2021-03-19 01:10:20', NULL),
-(2, 'Rahmi Chairani', NULL, NULL, NULL, 'rahmicr', 'rahmrchairani@gmail.com', 2, '18e40e1401eef67e1ae69efab09afb71f87ffb81', '2021-03-15 22:23:55', '2021-03-24 12:51:42', NULL),
+(1, 'Taufik Maulana', NULL, '', 'users-606978854a4e9.jpg', 'superadmin', 'taufikm9977@gmail.com', 1, '880d5b05cc01fac8261f9e84406e6c02dfe187d8', '2021-03-15 19:48:05', '2021-04-04 15:27:49', NULL),
+(2, 'Rahmi Chairani', NULL, '', 'users-606978f06d7f5.jpg', 'rahmicr', 'rahmrchairani@gmail.com', 2, '18e40e1401eef67e1ae69efab09afb71f87ffb81', '2021-03-15 22:23:55', '2021-04-04 15:29:36', NULL),
 (3, 'Mara Mawardien', NULL, NULL, NULL, 'maramawardien', 'maramawardien@gmail.com', 1, '18e40e1401eef67e1ae69efab09afb71f87ffb81', '2021-03-15 22:29:43', NULL, '2021-03-16 11:37:07'),
-(4, 'Samsul Syahbuddin', NULL, NULL, NULL, 'samsuls', 'taufikmaulana003@gmail.com', 3, 'df6bbf9c0d74a1f16c607dde25ad65c03c519428', '2021-03-15 22:30:48', '2021-03-24 10:44:05', NULL),
-(6, 'Dokie', '1997-01-29', 'L', NULL, 'dokie123', NULL, 2, '880d5b05cc01fac8261f9e84406e6c02dfe187d8', '2021-03-24 12:10:46', NULL, NULL);
+(4, 'Taufik', NULL, '', 'users-606b1dbd5227a.jpg', 'samsuls', 'taufikmaulana003@gmail.com', 3, 'df6bbf9c0d74a1f16c607dde25ad65c03c519428', '2021-03-15 22:30:48', '2021-04-05 21:25:01', NULL),
+(6, 'Dokie', '1997-01-29', 'L', 'users-606b1dae9e0c3.jpg', 'dokie123', 'dokie@gmail.com', 2, '880d5b05cc01fac8261f9e84406e6c02dfe187d8', '2021-03-24 12:10:46', '2021-04-05 21:24:46', NULL),
+(7, 'Andhika', NULL, '', 'users-606978539d88f.jpg', 'andhika', 'andhika@flexfy.my.id', 3, '880d5b05cc01fac8261f9e84406e6c02dfe187d8', '2021-04-04 13:14:40', '2021-04-04 15:26:59', NULL),
+(8, 'Mara Mawardien', '2021-04-09', 'L', 'users-6069778eb1e67.jpg', 'maramawardien2', 'maramawardien@gmail.com', 3, '880d5b05cc01fac8261f9e84406e6c02dfe187d8', '2021-04-04 13:26:23', '2021-04-04 15:25:54', NULL),
+(9, '2312312312', NULL, 'L', 'image-606963bc82bda.jpg', '123123', '123123@asda.sds', 1, '7c222fb2927d828af22f592134e8932480637c0d', '2021-04-04 13:59:08', NULL, '2021-04-04 15:33:03'),
+(10, 'Falahudan Akbar', '0000-00-00', 'P', 'user-606965e04b8aa.jpg', 'flahudan', 'flahudan@gmail.com', 3, '880d5b05cc01fac8261f9e84406e6c02dfe187d8', '2021-04-04 14:08:16', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -278,7 +261,7 @@ CREATE TABLE `users_keys` (
 --
 
 INSERT INTO `users_keys` (`id`, `users`, `ip_address`, `user_agent`, `token`, `token2`, `last_login`, `last_access`, `firebase_token`) VALUES
-(9, 1, '::1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36', 'd9ba9c87788252685a486d789c64c5ffc1fdb2aa', '2c14816bb0e29cb90039a9ce48db713cfa9608fd', '2021-03-26 14:49:10', '2021-03-26 14:49:10', NULL);
+(9, 1, '::1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36', 'aa2e7af904203d26edb53148be3491ebb9142847', '06fb7feb2335915d73ec6f12911bfecde03e7fc2', '2021-04-06 10:08:54', '2021-04-06 10:08:54', NULL);
 
 -- --------------------------------------------------------
 
@@ -310,13 +293,6 @@ INSERT INTO `verify` (`id`, `users`, `token`, `ip_address`, `user_agent`, `statu
 --
 
 --
--- Indeks untuk tabel `access`
---
-ALTER TABLE `access`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `module` (`module`);
-
---
 -- Indeks untuk tabel `content`
 --
 ALTER TABLE `content`
@@ -326,12 +302,6 @@ ALTER TABLE `content`
 -- Indeks untuk tabel `menu`
 --
 ALTER TABLE `menu`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `module`
---
-ALTER TABLE `module`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -352,8 +322,9 @@ ALTER TABLE `notification_label`
 -- Indeks untuk tabel `permission`
 --
 ALTER TABLE `permission`
-  ADD KEY `access` (`access`),
-  ADD KEY `role` (`role`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `role` (`role`),
+  ADD KEY `module` (`module`);
 
 --
 -- Indeks untuk tabel `role`
@@ -386,12 +357,6 @@ ALTER TABLE `verify`
 --
 
 --
--- AUTO_INCREMENT untuk tabel `access`
---
-ALTER TABLE `access`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
 -- AUTO_INCREMENT untuk tabel `content`
 --
 ALTER TABLE `content`
@@ -401,13 +366,7 @@ ALTER TABLE `content`
 -- AUTO_INCREMENT untuk tabel `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id` tinyint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-
---
--- AUTO_INCREMENT untuk tabel `module`
---
-ALTER TABLE `module`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT untuk tabel `notification`
@@ -419,19 +378,25 @@ ALTER TABLE `notification`
 -- AUTO_INCREMENT untuk tabel `notification_label`
 --
 ALTER TABLE `notification_label`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT untuk tabel `permission`
+--
+ALTER TABLE `permission`
+  MODIFY `id` mediumint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT untuk tabel `role`
 --
 ALTER TABLE `role`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT untuk tabel `users_keys`
@@ -450,12 +415,6 @@ ALTER TABLE `verify`
 --
 
 --
--- Ketidakleluasaan untuk tabel `access`
---
-ALTER TABLE `access`
-  ADD CONSTRAINT `access_ibfk_1` FOREIGN KEY (`module`) REFERENCES `module` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
---
 -- Ketidakleluasaan untuk tabel `notification`
 --
 ALTER TABLE `notification`
@@ -466,8 +425,8 @@ ALTER TABLE `notification`
 -- Ketidakleluasaan untuk tabel `permission`
 --
 ALTER TABLE `permission`
-  ADD CONSTRAINT `permission_ibfk_1` FOREIGN KEY (`access`) REFERENCES `access` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `permission_ibfk_2` FOREIGN KEY (`role`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `permission_ibfk_2` FOREIGN KEY (`role`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `permission_ibfk_3` FOREIGN KEY (`module`) REFERENCES `menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Ketidakleluasaan untuk tabel `users`
