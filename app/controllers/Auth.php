@@ -27,7 +27,7 @@ class Auth extends CI_Controller {
                 $res['user'] = $this->db->get_where('users', $args)->result_array();
             }
             if(count($res['user'])>0){
-                $res['users_keys'] = $this->db->get_where('users_keys', ['ip_address'=>$this->input->ip_address(),'user_agent'=>$this->input->user_agent()])->result_array();
+                $res['users_keys'] = $this->db->get_where('users_keys', ['ip_address'=>$this->input->ip_address(),'user_agent'=>$this->input->user_agent(),'users'=>$res['user'][0]['id']])->result_array();
                 $data['users'] = [
                     'users' => $res['user'][0]['id'],
                     'ip_address' => $this->input->ip_address(),

@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `content` (
   `id` tinyint NOT NULL,
   `nama` varchar(30) NOT NULL,
-  `deskripsi_pendek` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `deskripsi_pendek` varchar(50) NOT NULL,
   `deskripsi` varchar(255) NOT NULL,
   `email` varchar(50) DEFAULT NULL,
   `notelp` varchar(20) DEFAULT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE `content` (
   `favicon` varchar(50) NOT NULL,
   `tahun_rilis` year NOT NULL,
   `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data untuk tabel `content`
@@ -58,11 +58,11 @@ CREATE TABLE `menu` (
   `id` tinyint UNSIGNED NOT NULL,
   `label` varchar(50) NOT NULL,
   `url` varchar(100) NOT NULL,
-  `icon` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `icon` varchar(20) DEFAULT NULL,
   `parent` tinyint UNSIGNED NOT NULL DEFAULT '0',
   `position` tinyint UNSIGNED NOT NULL DEFAULT '1',
   `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB ;
 
 --
 -- Dumping data untuk tabel `menu`
@@ -97,7 +97,7 @@ CREATE TABLE `notification` (
   `status` enum('seen','unseen') NOT NULL DEFAULT 'unseen',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `requested_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB ;
 
 --
 -- Dumping data untuk tabel `notification`
@@ -120,7 +120,7 @@ CREATE TABLE `notification_label` (
   `color` varchar(20) NOT NULL DEFAULT 'primary',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB ;
 
 --
 -- Dumping data untuk tabel `notification_label`
@@ -143,7 +143,7 @@ CREATE TABLE `permission` (
   `role` tinyint UNSIGNED NOT NULL,
   `module` tinyint UNSIGNED NOT NULL,
   `access` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB ;
 
 --
 -- Dumping data untuk tabel `permission`
@@ -190,7 +190,7 @@ CREATE TABLE `role` (
   `id` tinyint UNSIGNED NOT NULL,
   `nama` varchar(30) NOT NULL,
   `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB ;
 
 --
 -- Dumping data untuk tabel `role`
@@ -221,7 +221,7 @@ CREATE TABLE `users` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB ;
 
 --
 -- Dumping data untuk tabel `users`
@@ -248,13 +248,13 @@ CREATE TABLE `users_keys` (
   `id` int UNSIGNED NOT NULL,
   `users` int UNSIGNED NOT NULL,
   `ip_address` varchar(30) NOT NULL,
-  `user_agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `user_agent` varchar(255) NOT NULL,
   `token` varchar(50) NOT NULL,
   `token2` varchar(50) NOT NULL,
   `last_login` datetime NOT NULL,
   `last_access` datetime DEFAULT NULL,
-  `firebase_token` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `firebase_token` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB ;
 
 --
 -- Dumping data untuk tabel `users_keys`
@@ -278,7 +278,7 @@ CREATE TABLE `verify` (
   `status` enum('Avaliable','Expired') NOT NULL DEFAULT 'Avaliable',
   `expired_at` datetime NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB ;
 
 --
 -- Dumping data untuk tabel `verify`
