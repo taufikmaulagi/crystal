@@ -50,21 +50,38 @@ class Crudgen extends Crystal {
             APPPATH . "controllers/" . ucwords($this->input->post('table')) . '.php',
             utf8_encode($this->load->view('settings/crudgen/template_controller', $list, TRUE))
         );
+        $this->writeTo(
+            APPPATH . "models/" . ucwords($this->input->post('table')) . '_model.php',
+            utf8_encode($this->load->view('settings/crudgen/template_model', $list, TRUE))
+        );
+        $this->writeTo(
+            APPPATH . "views/".$list['table'].'/index.php',
+            utf8_encode($this->load->view('settings/crudgen/template_index', $list, TRUE))
+        );
+        $this->writeTo(
+            APPPATH . "views/".$list['table'].'/add.php',
+            utf8_encode($this->load->view('settings/crudgen/template_add', $list, TRUE))
+        );
+        $this->writeTo(
+            APPPATH . "views/".$list['table'].'/edit.php',
+            utf8_encode($this->load->view('settings/crudgen/template_edit', $list, TRUE))
+        );
     }
 
 
 	public function writeTo($path, $code) {
 		if (file_exists($path)) {
-			echo "File sudah ada sebelumnya";
+			// echo "File sudah ada sebelumnya";
 		} else {
 			if (!file_exists(dirname($path))) {
-				mkdir(dirname($path), 0755, true);
+				mkdir(dirname($path), 0777, true);
+                chmod(dirname($path), 0775);
 			}
 			$myfile = fopen($path, "w") or die("Unable to open file!");
 			fwrite($myfile, html_entity_decode($code));
             chmod($path, "775");
 			fclose($myfile);
-			echo "File berhasil dibuat";
+			// echo "File berhasil dibuat";
 		};
 
 	}
