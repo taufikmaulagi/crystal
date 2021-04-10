@@ -13,8 +13,8 @@
   <link rel="stylesheet" href="<?=assets()?>js/select2/theme.css" type="text/css" />
   <link rel="stylesheet" href="<?=assets()?>js/datepicker/datepicker.css" type="text/css">
   <link rel="stylesheet" href="<?=assets()?>css/app.css" type="text/css" />
+  <script src="<?=assets()?>js/jquery.min.js"></script>
     <?=$heaplug?>
-    <script src="<?=assets()?>js/jquery.min.js"></script>
     <link rel="shortcut icon" href="<?=base_url('public/images/'.$main['favicon'])?>">
   <!--[if lt IE 9]>
     <script src="js/ie/html5shiv.js"></script>

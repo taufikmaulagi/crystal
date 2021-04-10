@@ -73,7 +73,7 @@ function datatable($head, $body, $style=array()){
 			</table></div>';
 }
 
-function button($theme='primary',$text='Button',$target='',$icon='',$size='sm',$onclick='',$style='',$other=''){
+function button($theme='primary',$text='Button',$target='#',$icon='',$size='sm',$onclick='',$style='',$other=''){
 	$icon = !empty($icon) ? '<i class="fa fa-'.$icon.'"></i>' : '';
     $onclick = !empty($onclick) ? 'onclick="'.$onclick.'"' : '';
     $style = !empty($style) ? 'style="'.$style.'"' : '';

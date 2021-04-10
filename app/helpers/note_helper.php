@@ -49,6 +49,11 @@ function load_plugin($plugin){
                 'head' => '<link rel="stylesheet" href="'.assets().'js/nestable/nestable.css" type="text/css" />',
                 'foot' => '<script src="'.assets().'js/nestable/jquery.nestable.js"></script><script src="'.assets().'js/nestable/demo.js"></script>'
             ];
+        case 'angular':
+            return [
+                'head' => '<script src="'.assets().'js/angular.min.js"></script>',
+                'foot' => '',
+            ];
         break;
     }
 }
