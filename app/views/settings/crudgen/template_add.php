@@ -15,6 +15,7 @@ echo panel(
 <?php } ?>
                     form: [
 <?php for ($i=0; $i < count($name); $i++) { 
+if($element[$i] != 'NONE'){
 if($element[$i] == 'IMAGE'){ ?>
                         input_image('<?=$label[$i]?>','<?=$name[$i]?>'),
 <?php } else if($element[$i] == 'EMAIL'){ ?>
@@ -27,6 +28,7 @@ if($element[$i] == 'IMAGE'){ ?>
                         input('<?=$label[$i]?>','<?=$name[$i]?>',type:'password'),
 <?php } else { ?>
                         input('<?=$label[$i]?>','<?=$name[$i]?>'),
+<?php } ?>
 <?php } ?>
 <?php } ?>
                         input_submit('Selesai & Simpan','primary')
