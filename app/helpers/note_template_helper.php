@@ -94,11 +94,19 @@ function badge($text='Badge',$theme='primary'){
 }
 
 function form($action='#',$method='post',$enctype='',$form=''){
+    $cry =& get_instance();
+    $csrf = array(
+        'name' => $cry->security->get_csrf_token_name(),
+        'hash' => $cry->security->get_csrf_hash()
+    );
     $html['form'] = '';
     foreach($form as $key => $val){
         $html['form'].= $val;
     }
-    return '<form action="'.$action.'" method="'.$method.'" enctype="'.$enctype.'" autocomplete="off">'.$html['form'].'</form>';
+    return '<form action="'.$action.'" method="'.$method.'" enctype="'.$enctype.'" autocomplete="off">
+    <input type="hidden" name="'.$csrf['name'].'" value="'.$csrf['hash'].'" />
+        '.$html['form'].'
+    </form>';
 }
 
 function input($label, $name, $value='',$width='',$size='',$type='text'){
