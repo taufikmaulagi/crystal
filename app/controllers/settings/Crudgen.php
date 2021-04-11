@@ -84,7 +84,7 @@ class Crudgen extends Crystal {
 			fclose($myfile);
 			// echo "File berhasil dibuat";
 		};
-
+        echo 'Generate Code Selesai';
 	}
 
 }
