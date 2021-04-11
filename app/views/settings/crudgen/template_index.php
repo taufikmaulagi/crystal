@@ -8,7 +8,7 @@ foreach($<?=$table?> as $key => $val){
 <?php for ($i=0; $i < count($name); $i++) {
 if($element[$i]!='NONE'){
 if($element[$i] == 'IMAGE'){?>
-        image($val['<?=$val['image']?>']),
+        image($val['<?=$name[$i]?>']),
 <?php } else if($element[$i] == 'created_at') { ?>
         ftime('%d %B %Y %H:%M', $val['created_at']),
 <?php } else {?>
@@ -27,9 +27,17 @@ echo panel(
     ],
     body: datatable([
         '#',
-<?php for ($i=0; $i < count($name); $i++) { ?>
+<?php for ($i=0; $i < count($name); $i++) {
+if($element[$i]!='NONE'){ ?>
         '<?=$label[$i]?>',
-<?php } ?>
+<?php } } ?>
         'Opsi'
-    ],$list['<?=$table?>'])
+    ],$list['<?=$table?>'],
+        style: [
+<?php for ($i=0; $i < count($name); $i++) { 
+if($element[$i]=='IMAGE'){ ?>
+                [<?=$i?>,'style="width:50px"']
+<?php } } ?>
+        ]
+    )
 );

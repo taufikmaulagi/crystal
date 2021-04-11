@@ -32,6 +32,7 @@ class Crudgen extends Crystal {
         foreach($data as $key => $val){
             $key = explode('|',$key);
             if(count($key)>0){
+                
                 if($key[0]=='name'){
                     array_push($list['name'],$val);
                 }

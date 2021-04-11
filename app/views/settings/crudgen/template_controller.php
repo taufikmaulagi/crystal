@@ -23,7 +23,7 @@ class <?=ucwords($table)?> extends Crystal {
 
     function add(){
         $this->unlock('<?=ucwords($table)?>|ADD');
-        if($this->_validation()){
+        if($this->_validation(state: 'add')){
             $args['<?=$table?>'] = $this->_post_data();
 <?php for ($i=0; $i < count($name); $i++) {
 if($element[$i] == 'IMAGE'){?>
@@ -38,7 +38,7 @@ if($element[$i] == 'IMAGE'){?>
         } else {
             
             template(
-                title: 'Tambah User baru',
+                title: 'Tambah <?=ucwords($table)?> baru',
                 content: '<?=$path?><?=$table?>/add',
                 data: [
                     
@@ -56,17 +56,19 @@ if($element[$i] == 'IMAGE'){?>
             redirect(base_url('<?=$path?><?=$table?>'));
         $list['uniq'] = array();
 <?php for ($i=0; $i < count($name); $i++) {
+if($element[$i]!='NONE'){
 if(str_contains($validation[$i], 'is_unique')){?>
         if($this->_post_data()['<?=$name[$i]?>'] == $res['<?=$table?>'][0]['<?=$name[$i]?>'])
             $list['uniq']['<?=$name[$i]?>'] = 'remove';
-<?php } 
+<?php } } 
 }?>
         if($this->_validation($list['uniq'])){
             $args['<?=$table?>'] = $this->_post_data();
 <?php for ($i=0; $i < count($name); $i++) {
+if($element[$i]!='NONE'){
 if($element[$i] == 'IMAGE'){?>
             $args['<?=$table?>']['<?=$name[$i]?>'] = $this->uploader('<?=$name[$i]?>','<?=$table?>');
-<?php } 
+<?php } }
 }?>
 <?php for ($i=0; $i < count($name); $i++) {
 if($element[$i] == 'PASSWORD'){?>
@@ -82,7 +84,7 @@ if($element[$i] == 'PASSWORD'){?>
             redirect(base_url('<?=$path?><?=$table?>/edit/'.$id),'refresh');
         } else {
             template(
-                title: 'Update Data User',
+                title: 'Update Data <?=ucwords($table)?>',
                 content: '<?=$path?><?=$table?>/edit',
                 data: [
                     '<?=$table?>' => $res['<?=$table?>'][0],
@@ -101,24 +103,28 @@ if($element[$i] == 'PASSWORD'){?>
         redirect(base_url('<?=$path?><?=$table?>/'),'refresh');
     }
 
-    private function _validation($uniqlist=array()){
+    private function _validation($uniqlist=array(),$state='default'){
 <?php for ($i=0; $i < count($name); $i++) {
+if($element[$i]!='NONE'){
 if(str_contains($validation[$i], 'is_unique')){?>
         $uniq['<?=$name[$i]?>'] = '|is_unique[<?=$table?>.<?=$name[$i]?>]';
         if(!empty($uniqlist['<?=$name[$i]?>']))
             $uniq['<?=$name[$i]?>'] = '';
-<?php } 
+<?php } }
 }?>
 <?php for ($i=0; $i < count($name); $i++) {
+if($element[$i]!='NONE'){
 if(str_contains($validation[$i], 'is_unique')){
 $validation[$i] = str_replace('|is_unique','',$validation[$i]);
 ?>
         $this->set_rules('<?=$name[$i]?>','<?=$label[$i]?>','<?=$validation[$i]?>'.$uniq['<?=$name[$i]?>']);
 <?php } else if($element[$i] == 'IMAGE' && str_contains($validation[$i], 'required')){ ?>
-        $this->set_rules('<?=$name[$i]?>','<?=$label[$i]?>','callback_<?=$name[$i]?>_required');
+        if($state=='add'){
+            $this->set_rules('<?=$name[$i]?>','<?=$label[$i]?>','callback_<?=$name[$i]?>_required');
+        }
 <?php } else if(!empty($validation[$i])) { ?>
         $this->set_rules('<?=$name[$i]?>','<?=$label[$i]?>','<?=$validation[$i]?>');
-<?php }
+<?php } }
 }?>    
         return $this->validation_run();
     }
@@ -126,20 +132,21 @@ $validation[$i] = str_replace('|is_unique','',$validation[$i]);
     private function _post_data(){
         return [
 <?php for ($i=0; $i < count($name); $i++) {
+if($element[$i]!='NONE'){
 if($element[$i] == 'DATE'){?>
             '<?=$name[$i]?>' => $this->post('<?=$name[$i]?>') != '01-01-1970' ? date('Y-m-d', strtotime($this->post('<?=$name[$i]?>'))) : NULL,
 <?php } else if($element[$i] == 'PASSWORD'){ ?>
             '<?=$name[$i]?>' => password_hash($this->post('<?=$name[$i]?>'))    
-<?php } else if($element[$i] != 'IMAGE' || $name[$i] != 'deleted_at' || $name[$i] != 'created_at') { ?>
+<?php } else if($element[$i] != 'IMAGE') { ?>
             '<?=$name[$i]?>' => $this->post('<?=$name[$i]?>'),
-<?php }
+<?php } }
 }?>
         ];
     } 
     
 <?php for ($i=0; $i < count($name); $i++) {
 if($element[$i] == 'IMAGE' && str_contains($validation[$i], 'required')){ ?>
-    private function <?=$name[$i]?>_required(){
+    function <?=$name[$i]?>_required(){
         $this->form_validation->set_message('<?=$name[$i]?>_required','Belum Memilih File');
         if (empty($_FILES['<?=$name[$i]?>']['name'])) {
             return false;
