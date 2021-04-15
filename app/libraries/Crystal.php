@@ -30,6 +30,19 @@ class Crystal extends CI_Controller {
         return;
     }
 
+    function generate_qr($uniqid, $uniqname){
+        
+        $this->load->library('ciqrcode');
+        $filename = $uniqname.'-'.uniqid().'png';
+        $params['data'] = $uniqid.uniqid();
+        $params['level'] = 'H';
+        $params['size'] = 10;
+        $params['savename'] = './public/images/'.$filename;
+        $this->ciqrcode->generate($params);
+        return $filename;
+
+    }
+
     function set_rules($name, $label, $rule){
         $el =& get_instance();
         $el->form_validation->set_rules($name, $label, $rule.'|trim|xss_clean');

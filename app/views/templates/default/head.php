@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="<?=assets()?>js/select2/theme.css" type="text/css" />
   <link rel="stylesheet" href="<?=assets()?>js/datepicker/datepicker.css" type="text/css">
   <link rel="stylesheet" href="<?=assets()?>css/app.css" type="text/css" />
+  <link rel="stylesheet" href="<?=assets()?>js/sweetalert/sweetalert2.min.css" type="text/css" />
+  <script src="<?=assets()?>js/sweetalert/sweetalert2.min.js"></script>
   <script src="<?=assets()?>js/jquery.min.js"></script>
     <?=$heaplug?>
     <link rel="shortcut icon" href="<?=base_url('public/images/'.$main['favicon'])?>">
