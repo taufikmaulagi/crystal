@@ -144,6 +144,14 @@
       $.ajax({url: "<?=base_url('settings/notification/ajx_read_all')?>"});
       $('.navbar-nav .count').html('');
     });
+
+    function printDiv(divName) {
+      var printContents = $('#'+divName).html();
+      var originalContents = document.body.innerHTML;
+      document.body.innerHTML = printContents;
+      window.print();
+      document.body.innerHTML = originalContents;
+    }
   </script>
 </body>
 </html>
