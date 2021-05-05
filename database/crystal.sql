@@ -2,10 +2,10 @@
 -- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Waktu pembuatan: 06 Apr 2021 pada 12.30
--- Versi server: 8.0.23-0ubuntu0.20.04.1
--- Versi PHP: 8.0.3
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 05 Bulan Mei 2021 pada 06.03
+-- Versi server: 10.4.18-MariaDB
+-- Versi PHP: 8.0.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `content` (
-  `id` tinyint NOT NULL,
+  `id` tinyint(4) NOT NULL,
   `nama` varchar(30) NOT NULL,
   `deskripsi_pendek` varchar(50) NOT NULL,
   `deskripsi` varchar(255) NOT NULL,
@@ -37,9 +37,9 @@ CREATE TABLE `content` (
   `no_hp` varchar(20) DEFAULT NULL,
   `logo` varchar(30) NOT NULL,
   `favicon` varchar(50) NOT NULL,
-  `tahun_rilis` year NOT NULL,
+  `tahun_rilis` year(4) NOT NULL,
   `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `content`
@@ -55,14 +55,14 @@ INSERT INTO `content` (`id`, `nama`, `deskripsi_pendek`, `deskripsi`, `email`, `
 --
 
 CREATE TABLE `menu` (
-  `id` tinyint UNSIGNED NOT NULL,
+  `id` tinyint(3) UNSIGNED NOT NULL,
   `label` varchar(50) NOT NULL,
   `url` varchar(100) NOT NULL,
   `icon` varchar(20) DEFAULT NULL,
-  `parent` tinyint UNSIGNED NOT NULL DEFAULT '0',
-  `position` tinyint UNSIGNED NOT NULL DEFAULT '1',
+  `parent` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
+  `position` tinyint(3) UNSIGNED NOT NULL DEFAULT 1,
   `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `menu`
@@ -78,7 +78,8 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`, `position`, `deleted
 (8, 'Module', 'settings/module/', 'fa fa-folder', 7, 1, '2021-04-05 07:59:43'),
 (12, 'Access', 'settings/access/', 'fa fa-folder-open', 1, 6, '2021-04-05 08:03:11'),
 (13, 'Content', 'settings/content/', 'fa fa-rss-square', 1, 5, NULL),
-(15, 'Notification Label', 'settings/notification_label/', 'fa fa-check-square', 1, 6, NULL);
+(15, 'Notification Label', 'settings/notification_label/', 'fa fa-check-square', 1, 6, NULL),
+(23, 'Code Generator', '/settings/crudgen', 'fa fa-terminal', 1, 7, NULL);
 
 -- --------------------------------------------------------
 
@@ -87,17 +88,17 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`, `position`, `deleted
 --
 
 CREATE TABLE `notification` (
-  `id` int UNSIGNED NOT NULL,
-  `users` int UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `users` int(10) UNSIGNED NOT NULL,
   `judul` varchar(50) DEFAULT NULL,
   `pesan` varchar(255) NOT NULL,
   `foto` varchar(30) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
-  `label` tinyint UNSIGNED NOT NULL,
+  `label` tinyint(3) UNSIGNED NOT NULL,
   `status` enum('seen','unseen') NOT NULL DEFAULT 'unseen',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `requested_at` datetime DEFAULT NULL
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `notification`
@@ -114,13 +115,13 @@ INSERT INTO `notification` (`id`, `users`, `judul`, `pesan`, `foto`, `url`, `lab
 --
 
 CREATE TABLE `notification_label` (
-  `id` tinyint UNSIGNED NOT NULL,
+  `id` tinyint(3) UNSIGNED NOT NULL,
   `nama` varchar(50) NOT NULL,
   `icon` varchar(30) NOT NULL,
   `color` varchar(20) NOT NULL DEFAULT 'primary',
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `notification_label`
@@ -139,11 +140,11 @@ INSERT INTO `notification_label` (`id`, `nama`, `icon`, `color`, `created_at`, `
 --
 
 CREATE TABLE `permission` (
-  `id` mediumint UNSIGNED NOT NULL,
-  `role` tinyint UNSIGNED NOT NULL,
-  `module` tinyint UNSIGNED NOT NULL,
+  `id` mediumint(8) UNSIGNED NOT NULL,
+  `role` tinyint(3) UNSIGNED NOT NULL,
+  `module` tinyint(3) UNSIGNED NOT NULL,
   `access` varchar(10) NOT NULL
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `permission`
@@ -187,10 +188,10 @@ INSERT INTO `permission` (`id`, `role`, `module`, `access`) VALUES
 --
 
 CREATE TABLE `role` (
-  `id` tinyint UNSIGNED NOT NULL,
+  `id` tinyint(3) UNSIGNED NOT NULL,
   `nama` varchar(30) NOT NULL,
   `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `role`
@@ -209,19 +210,19 @@ INSERT INTO `role` (`id`, `nama`, `deleted_at`) VALUES
 --
 
 CREATE TABLE `users` (
-  `id` int UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `nama` varchar(50) NOT NULL,
   `tanggal_lahir` date DEFAULT NULL,
   `jenis_kelamin` enum('L','P') DEFAULT NULL,
   `foto` varchar(50) DEFAULT NULL,
   `username` varchar(50) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
-  `role` tinyint UNSIGNED NOT NULL,
+  `role` tinyint(3) UNSIGNED NOT NULL,
   `password` varchar(50) DEFAULT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `users`
@@ -245,8 +246,8 @@ INSERT INTO `users` (`id`, `nama`, `tanggal_lahir`, `jenis_kelamin`, `foto`, `us
 --
 
 CREATE TABLE `users_keys` (
-  `id` int UNSIGNED NOT NULL,
-  `users` int UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `users` int(10) UNSIGNED NOT NULL,
   `ip_address` varchar(30) NOT NULL,
   `user_agent` varchar(255) NOT NULL,
   `token` varchar(50) NOT NULL,
@@ -254,14 +255,15 @@ CREATE TABLE `users_keys` (
   `last_login` datetime NOT NULL,
   `last_access` datetime DEFAULT NULL,
   `firebase_token` varchar(200) DEFAULT NULL
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `users_keys`
 --
 
 INSERT INTO `users_keys` (`id`, `users`, `ip_address`, `user_agent`, `token`, `token2`, `last_login`, `last_access`, `firebase_token`) VALUES
-(9, 1, '::1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36', 'aa2e7af904203d26edb53148be3491ebb9142847', '06fb7feb2335915d73ec6f12911bfecde03e7fc2', '2021-04-06 10:08:54', '2021-04-06 10:08:54', NULL);
+(9, 1, '::1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36', 'aa2e7af904203d26edb53148be3491ebb9142847', '06fb7feb2335915d73ec6f12911bfecde03e7fc2', '2021-04-06 10:08:54', '2021-04-06 10:08:54', NULL),
+(10, 1, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36', 'd368012784d28e35df99f131e97f7eda83dfcc71', '02d63ee105d18dcf5d39a5095517a9561f2ef31f', '2021-05-05 06:00:52', '2021-05-05 06:00:52', NULL);
 
 -- --------------------------------------------------------
 
@@ -270,15 +272,15 @@ INSERT INTO `users_keys` (`id`, `users`, `ip_address`, `user_agent`, `token`, `t
 --
 
 CREATE TABLE `verify` (
-  `id` smallint UNSIGNED NOT NULL,
-  `users` int UNSIGNED NOT NULL,
+  `id` smallint(5) UNSIGNED NOT NULL,
+  `users` int(10) UNSIGNED NOT NULL,
   `token` varchar(255) NOT NULL,
   `ip_address` varchar(50) NOT NULL,
   `user_agent` varchar(255) NOT NULL,
   `status` enum('Avaliable','Expired') NOT NULL DEFAULT 'Avaliable',
   `expired_at` datetime NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB ;
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `verify`
@@ -360,55 +362,55 @@ ALTER TABLE `verify`
 -- AUTO_INCREMENT untuk tabel `content`
 --
 ALTER TABLE `content`
-  MODIFY `id` tinyint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT untuk tabel `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `notification_label`
 --
 ALTER TABLE `notification_label`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `permission`
 --
 ALTER TABLE `permission`
-  MODIFY `id` mediumint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT untuk tabel `role`
 --
 ALTER TABLE `role`
-  MODIFY `id` tinyint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT untuk tabel `users_keys`
 --
 ALTER TABLE `users_keys`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT untuk tabel `verify`
 --
 ALTER TABLE `verify`
-  MODIFY `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -418,27 +420,27 @@ ALTER TABLE `verify`
 -- Ketidakleluasaan untuk tabel `notification`
 --
 ALTER TABLE `notification`
-  ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`label`) REFERENCES `notification_label` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `notification_ibfk_2` FOREIGN KEY (`users`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`label`) REFERENCES `notification_label` (`id`),
+  ADD CONSTRAINT `notification_ibfk_2` FOREIGN KEY (`users`) REFERENCES `users` (`id`);
 
 --
 -- Ketidakleluasaan untuk tabel `permission`
 --
 ALTER TABLE `permission`
-  ADD CONSTRAINT `permission_ibfk_2` FOREIGN KEY (`role`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `permission_ibfk_3` FOREIGN KEY (`module`) REFERENCES `menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `permission_ibfk_2` FOREIGN KEY (`role`) REFERENCES `role` (`id`),
+  ADD CONSTRAINT `permission_ibfk_3` FOREIGN KEY (`module`) REFERENCES `menu` (`id`);
 
 --
 -- Ketidakleluasaan untuk tabel `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role`) REFERENCES `role` (`id`);
 
 --
 -- Ketidakleluasaan untuk tabel `verify`
 --
 ALTER TABLE `verify`
-  ADD CONSTRAINT `verify_ibfk_1` FOREIGN KEY (`users`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `verify_ibfk_1` FOREIGN KEY (`users`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
